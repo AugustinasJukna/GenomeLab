@@ -3,9 +3,11 @@ package edu.ktu.GenomeLab.controllers;
 import edu.ktu.GenomeLab.models.Genome;
 import edu.ktu.GenomeLab.repositories.GenomeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
@@ -30,15 +32,14 @@ public class GenomeController {
     }
 
     @PatchMapping("/update/{id}")
-    public Genome updateGenome(
+    public ResponseEntity<Genome> updateGenome(
             @PathVariable Long id,
             @RequestParam String sequence) {
-        return genomeRepository.findById(id)
-                .map(genome -> {
-                    genome.setSequence(sequence);
-                    return genomeRepository.save(genome);
-                })
+        Genome genome = genomeRepository.findById(id)
                 .orElse(null);
+        if (genome == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        genome.setSequence(sequence);
+        return new ResponseEntity<Genome>(genomeRepository.save(genome), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -49,6 +50,6 @@ public class GenomeController {
 
         genomeRepository.deleteById(id);
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 }

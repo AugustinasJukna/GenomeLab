@@ -2,10 +2,12 @@ package edu.ktu.GenomeLab.controllers;
 
 import edu.ktu.GenomeLab.models.Environment;
 import edu.ktu.GenomeLab.models.Genome;
+import edu.ktu.GenomeLab.models.User;
 import edu.ktu.GenomeLab.repositories.EnvironmentRepository;
 import edu.ktu.GenomeLab.repositories.GenomeRepository;
 import edu.ktu.GenomeLab.repositories.OrganismRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path="/environment")
+@RequestMapping(path="/environments")
 public class EnvironmentController {
     @Autowired
     private EnvironmentRepository environmentRepository;
@@ -22,7 +24,7 @@ public class EnvironmentController {
     @Autowired
     private GenomeRepository genomeRepository;
 
-    @PostMapping("/add")
+    @PostMapping("/create")
     public Environment createEnvironment(
             @RequestParam String name,
             @RequestParam String description,
@@ -43,7 +45,7 @@ public class EnvironmentController {
     }
 
     @PatchMapping("/update/{id}")
-    public Environment updateEnvironment(
+    public ResponseEntity<Environment>  updateEnvironment(
             @PathVariable Long id,
             @RequestParam String name,
             @RequestParam String description,
@@ -53,9 +55,9 @@ public class EnvironmentController {
                     environment.setName(name);
                     environment.setDescription(description);
                     environment.setMutationCoefficient(mutationCoefficient);
-                    return environmentRepository.save(environment);
+                    return new ResponseEntity<Environment>(environmentRepository.save(environment), HttpStatus.OK);
                 })
-                .orElse(null);
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
 
@@ -66,10 +68,10 @@ public class EnvironmentController {
             return ResponseEntity.notFound().build();
         }
         environmentRepository.deleteById(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
-    @GetMapping("getAllGenomesByEnvironmentId/{id}")
+    @GetMapping("/getAllGenomesByEnvironmentId/{id}")
     public Iterable<Genome> getAllGenomesByEnvironmentId(@PathVariable Long id) {
         return environmentRepository.getAllGenomesByEnvironmentId(id);
     }

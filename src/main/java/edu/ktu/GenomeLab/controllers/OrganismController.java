@@ -6,6 +6,7 @@ import edu.ktu.GenomeLab.models.Organism;
 import edu.ktu.GenomeLab.repositories.GenomeRepository;
 import edu.ktu.GenomeLab.repositories.OrganismRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +14,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path="/organism")
+@RequestMapping(path="/organisms")
 public class OrganismController {
     @Autowired
     private OrganismRepository organismRepository;
@@ -37,24 +38,22 @@ public class OrganismController {
     }
 
     @PatchMapping("/update/{id}")
-    public Organism updateOrganism(
+    public ResponseEntity<Organism> updateOrganism(
             @PathVariable Long id,
-            @RequestBody Organism updatedOrganism) {
-        return organismRepository.findById(id)
-                .map(organism -> {
-                    if (updatedOrganism.getGenome() != null) {
-                        Genome genome = genomeRepository.findById(updatedOrganism.getGenome().getId())
-                                .orElseThrow(() -> new NoSuchElementException("Genome not found"));
-                        organism.setGenome(genome);
-                    }
-
-                    organism.setX(updatedOrganism.getX());
-                    organism.setY(updatedOrganism.getY());
-                    organism.setAge(updatedOrganism.getAge());
-
-                    return organismRepository.save(organism);
-                })
+            @RequestParam Long genomeId,
+            @RequestParam int x,
+            @RequestParam int y,
+            @RequestParam int age) {
+        Genome genome = genomeRepository.findById(genomeId)
                 .orElse(null);
+        Organism organism = organismRepository.findById(id)
+                .orElse(null);;
+        if (genome == null || organism == null) return ResponseEntity.notFound().build();
+        organism.setGenome(genome);
+        organism.setX(x);
+        organism.setY(y);
+        organism.setAge(age);
+        return ResponseEntity.ok(organism);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -65,6 +64,6 @@ public class OrganismController {
 
         organismRepository.deleteById(id);
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 }

@@ -1,5 +1,6 @@
 package edu.ktu.GenomeLab.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class Environment {
     @Column(name = "description")
     private String description;
     @OneToMany(mappedBy = "environment")
+    @JsonManagedReference
     private List<Organism> organisms;
     @Column(name = "mutationCoefficient")
     private double mutationCoefficient;

@@ -5,6 +5,7 @@ import edu.ktu.GenomeLab.models.User;
 import edu.ktu.GenomeLab.models.enums.Role;
 import edu.ktu.GenomeLab.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +38,7 @@ public class UserController {
     }
 
     @PatchMapping("/update/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
         Optional<User> existingUser = userRepository.findById(id);
         if (existingUser.isPresent()) {
             User user = existingUser.get();
@@ -45,9 +46,9 @@ public class UserController {
             user.setPassword(updatedUser.getPassword());
             user.setEmail(updatedUser.getEmail());
             user.setRole(updatedUser.getRole());
-            return userRepository.save(user);
+            return new ResponseEntity<User>(user, HttpStatus.OK);
         } else {
-            throw new NoSuchElementException("User not found with id: " + id);
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -57,7 +58,7 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
         userRepository.deleteById(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/getMostCommonGenome")

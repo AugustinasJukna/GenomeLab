@@ -1,5 +1,7 @@
 package edu.ktu.GenomeLab.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -11,6 +13,7 @@ public class Organism {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "genome_id", referencedColumnName = "id")
+    @JsonManagedReference
     private Genome genome;
 
     @Column(name = "x")
@@ -22,6 +25,7 @@ public class Organism {
 
     @ManyToOne
     @JoinColumn(name = "environment_id")
+    @JsonBackReference
     private Environment environment;
 
     public Organism() {

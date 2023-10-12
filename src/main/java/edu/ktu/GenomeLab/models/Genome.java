@@ -9,7 +9,6 @@ public class Genome {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "sequence")
     private String sequence;
 
     public Genome() {}
