@@ -6,6 +6,7 @@ import edu.ktu.GenomeLab.models.User;
 import edu.ktu.GenomeLab.repositories.EnvironmentRepository;
 import edu.ktu.GenomeLab.repositories.GenomeRepository;
 import edu.ktu.GenomeLab.repositories.OrganismRepository;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,23 +26,28 @@ public class EnvironmentController {
     private GenomeRepository genomeRepository;
 
     @PostMapping("/create")
-    public Environment createEnvironment(
+    public ResponseEntity<Environment> createEnvironment(
             @RequestParam String name,
             @RequestParam String description,
             @RequestParam double mutationCoefficient) {
         Environment environment = new Environment(name, description);
         environment.setMutationCoefficient(mutationCoefficient);
-        return environmentRepository.save(environment);
+        return new ResponseEntity<>(environmentRepository.save(environment), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public Iterable<Environment> getAllEnvironments() {
-        return  environmentRepository.findAll();
+    public ResponseEntity<List<Environment>> getAllEnvironments()
+    {
+        List<Environment> environments = (List<Environment>) environmentRepository.findAll();
+        if (environments.isEmpty()) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(environments);
     }
 
     @GetMapping("/{id}")
-    public Optional<Environment> getEnvironmentById(@PathVariable Long id) {
-        return environmentRepository.findById(id);
+    public ResponseEntity<Environment> getEnvironmentById(@PathVariable Long id) {
+        Environment env = environmentRepository.findById(id).orElse(null);
+        if (env == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(env);
     }
 
     @PatchMapping("/update/{id}")
@@ -63,7 +69,7 @@ public class EnvironmentController {
 
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Object> deleteEnvironment(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteEnvironment(@PathVariable Long id) {
         if (!environmentRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
@@ -72,7 +78,9 @@ public class EnvironmentController {
     }
 
     @GetMapping("/getAllGenomesByEnvironmentId/{id}")
-    public Iterable<Genome> getAllGenomesByEnvironmentId(@PathVariable Long id) {
-        return environmentRepository.getAllGenomesByEnvironmentId(id);
+    public ResponseEntity<List<Genome>> getAllGenomesByEnvironmentId(@PathVariable Long id) {
+        List<Genome> genomes = (List<Genome>) environmentRepository.getAllGenomesByEnvironmentId(id);
+        if (genomes.isEmpty()) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(genomes);
     }
 }

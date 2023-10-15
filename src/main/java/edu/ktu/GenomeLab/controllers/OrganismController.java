@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -22,19 +23,25 @@ public class OrganismController {
     private GenomeRepository genomeRepository;
 
     @PostMapping("/add")
-    public @ResponseBody Organism addNewOrganism (@RequestParam Long genomeId, @RequestParam int x, @RequestParam int y, @RequestParam int age) {
-        Genome genome = genomeRepository.findById(genomeId).orElseThrow(() -> new NoSuchElementException("Genome not found"));;
+    public ResponseEntity<Organism> addNewOrganism (@RequestParam Long genomeId, @RequestParam int x, @RequestParam int y, @RequestParam int age) {
+        Genome genome = genomeRepository.findById(genomeId).orElse(null);
+        if (genome == null) return ResponseEntity.not;
         return organismRepository.save(new Organism(genome, x, y, age));
     }
 
-    @GetMapping("/")
-    public @ResponseBody Iterable< Organism> getAllGenomes() {
-        return organismRepository.findAll();
+    @GetMapping
+    public ResponseEntity<List<Organism>> getAllGenomes()
+    {
+        List<Organism> organisms = (List<Organism>) organismRepository.findAll();
+        if (organisms.isEmpty()) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(organisms);
     }
 
     @GetMapping("/{id}")
-    public @ResponseBody Optional<Organism> getGenomeById(@PathVariable Long id) {
-        return organismRepository.findById(id);
+    public ResponseEntity<Organism> getGenomeById(@PathVariable Long id) {
+        Organism organism = organismRepository.findById(id).orElse(null);
+        if (organism == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(organism);
     }
 
     @PatchMapping("/update/{id}")

@@ -7,11 +7,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path="/genome")
+@RequestMapping(path="/genomes")
 public class GenomeController {
     @Autowired
     private GenomeRepository genomeRepository;
@@ -22,8 +23,11 @@ public class GenomeController {
     }
 
     @GetMapping
-    public @ResponseBody Iterable< Genome> getAllGenomes() {
-        return genomeRepository.findAll();
+    public @ResponseBody ResponseEntity<List<Genome>> getAllGenomes()
+    {
+        List<Genome> genomes = (List<Genome>) genomeRepository.findAll();
+        if (genomes.isEmpty()) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(genomes);
     }
 
     @GetMapping("/{id}")

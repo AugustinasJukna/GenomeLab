@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.NoSuchElementException;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
