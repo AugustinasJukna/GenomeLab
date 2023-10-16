@@ -20,10 +20,6 @@ import java.util.Optional;
 public class EnvironmentController {
     @Autowired
     private EnvironmentRepository environmentRepository;
-    @Autowired
-    private OrganismRepository organismRepository;
-    @Autowired
-    private GenomeRepository genomeRepository;
 
     @PostMapping("/create")
     public ResponseEntity<Environment> createEnvironment(
@@ -77,7 +73,7 @@ public class EnvironmentController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/getAllGenomesByEnvironmentId/{id}")
+    @GetMapping("/genomes/{id}")
     public ResponseEntity<List<Genome>> getAllGenomesByEnvironmentId(@PathVariable Long id) {
         List<Genome> genomes = (List<Genome>) environmentRepository.getAllGenomesByEnvironmentId(id);
         if (genomes.isEmpty()) return ResponseEntity.notFound().build();

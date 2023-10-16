@@ -5,6 +5,7 @@ import edu.ktu.GenomeLab.models.Genome;
 import edu.ktu.GenomeLab.models.Organism;
 import edu.ktu.GenomeLab.repositories.GenomeRepository;
 import edu.ktu.GenomeLab.repositories.OrganismRepository;
+import edu.ktu.GenomeLab.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +23,12 @@ public class OrganismController {
     @Autowired
     private GenomeRepository genomeRepository;
 
-    @PostMapping("/add")
-    public ResponseEntity<Organism> addNewOrganism (@RequestParam Long genomeId, @RequestParam int x, @RequestParam int y, @RequestParam int age) {
-        Genome genome = genomeRepository.findById(genomeId).orElse(null);
-        if (genome == null) return ResponseEntity.not;
-        return organismRepository.save(new Organism(genome, x, y, age));
+    @PostMapping("/create")
+    public ResponseEntity<Organism> addNewOrganism (@RequestParam int x, @RequestParam int y, @RequestParam int age) {
+        //Genome genome = genomeRepository.findById(genomeId).orElse(null);
+        Genome genome = genomeRepository.save(new Genome(Utils.generateRandomSequence(16)));
+        //if (genome == null) return ResponseEntity.notFound().build();
+        return new ResponseEntity<>(organismRepository.save(new Organism(genome, x, y, age)), HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -47,16 +49,12 @@ public class OrganismController {
     @PatchMapping("/update/{id}")
     public ResponseEntity<Organism> updateOrganism(
             @PathVariable Long id,
-            @RequestParam Long genomeId,
             @RequestParam int x,
             @RequestParam int y,
             @RequestParam int age) {
-        Genome genome = genomeRepository.findById(genomeId)
-                .orElse(null);
         Organism organism = organismRepository.findById(id)
                 .orElse(null);;
-        if (genome == null || organism == null) return ResponseEntity.notFound().build();
-        organism.setGenome(genome);
+        if (organism == null) return ResponseEntity.notFound().build();
         organism.setX(x);
         organism.setY(y);
         organism.setAge(age);

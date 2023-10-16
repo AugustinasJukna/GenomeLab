@@ -17,9 +17,9 @@ public class GenomeController {
     @Autowired
     private GenomeRepository genomeRepository;
 
-    @PostMapping("/add")
-    public @ResponseBody Genome addNewGenome (@RequestParam String sequence) {
-        return genomeRepository.save(new Genome(sequence));
+    @PostMapping("/create")
+    public ResponseEntity<Genome>  addNewGenome (@RequestParam String sequence) {
+        return new ResponseEntity<>(genomeRepository.save(new Genome(sequence)), HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -31,8 +31,10 @@ public class GenomeController {
     }
 
     @GetMapping("/{id}")
-    public @ResponseBody Optional<Genome> getGenomeById(@PathVariable Long id) {
-        return genomeRepository.findById(id);
+    public ResponseEntity<Genome> getGenomeById(@PathVariable Long id) {
+        Genome genome = genomeRepository.findById(id).orElse(null);
+        if (genome == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(genome);
     }
 
     @PatchMapping("/update/{id}")
@@ -41,9 +43,9 @@ public class GenomeController {
             @RequestParam String sequence) {
         Genome genome = genomeRepository.findById(id)
                 .orElse(null);
-        if (genome == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (genome == null) return ResponseEntity.notFound().build();
         genome.setSequence(sequence);
-        return new ResponseEntity<Genome>(genomeRepository.save(genome), HttpStatus.OK);
+        return new ResponseEntity<>(genomeRepository.save(genome), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")

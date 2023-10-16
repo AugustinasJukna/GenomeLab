@@ -21,20 +21,24 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @PostMapping("/add")
-    public User createUser(@RequestParam String name, @RequestParam String password, @RequestParam String email, @RequestParam Role role) {
+    @PostMapping("/create")
+    public ResponseEntity<User> createUser(@RequestParam String name, @RequestParam String password, @RequestParam String email, @RequestParam Role role) {
         User user = new User(name, password, email, role);
-        return userRepository.save(user);
+        return new ResponseEntity<>(userRepository.save(user), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public Iterable<User> getAllUsers() {
-        return userRepository.findAll();
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = (List<User>) userRepository.findAll();
+        if (users.isEmpty()) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(users);
     }
 
     @GetMapping("/{id}")
-    public Optional<User> getUserById(@PathVariable Long id) {
-        return userRepository.findById(id);
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+        User user = userRepository.findById(id).orElse(null);
+        if (user == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(user);
     }
 
     @PatchMapping("/update/{id}")
@@ -46,7 +50,7 @@ public class UserController {
             user.setPassword(updatedUser.getPassword());
             user.setEmail(updatedUser.getEmail());
             user.setRole(updatedUser.getRole());
-            return new ResponseEntity<User>(user, HttpStatus.OK);
+            return new ResponseEntity<>(user, HttpStatus.OK);
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -61,9 +65,11 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/getMostCommonGenome")
-    public List<Object[]> getMostCommonGenomeInAllEnvironments() {
-        return userRepository.getMostCommonGenomeInAllEnvironments();
+    @GetMapping("/genome")
+    public ResponseEntity<List<Object[]>> getMostCommonGenomeInAllEnvironments() {
+        List<Object[]> genome =  userRepository.getMostCommonGenomeInAllEnvironments();
+        if (genome.isEmpty()) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(genome);
     }
 
 
