@@ -1,8 +1,11 @@
 package edu.ktu.GenomeLab.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "organisms")
@@ -11,10 +14,10 @@ public class Organism {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "genome_id", referencedColumnName = "id")
+    @OneToMany(mappedBy = "genome")
     @JsonManagedReference
-    private Genome genome;
+    @JsonIgnore
+    private List<Genome> genomes;
 
     @Column(name = "x")
     private int x;
@@ -26,13 +29,13 @@ public class Organism {
     @ManyToOne
     @JoinColumn(name = "environment_id")
     @JsonBackReference
+    @JsonIgnore
     private Environment environment;
 
     public Organism() {
 
     }
-    public Organism(Genome genome, int x, int y, int age) {
-        this.genome = genome;
+    public Organism(int x, int y, int age) {
         this.x = x;
         this.y = y;
         this.age = age;
@@ -46,12 +49,12 @@ public class Organism {
         this.id = id;
     }
 
-    public Genome getGenome() {
-        return genome;
+    public List<Genome> getGenomes() {
+        return genomes;
     }
 
-    public void setGenome(Genome genome) {
-        this.genome = genome;
+    public void setGenomes(List<Genome> genomes) {
+        this.genomes = genomes;
     }
 
     public int getX() {

@@ -1,5 +1,7 @@
 package edu.ktu.GenomeLab.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -29,6 +31,12 @@ public class Genome {
     public void setSequence(String sequence) {
         this.sequence = sequence;
     }
+
+    @ManyToOne
+    @JoinColumn(name = "organism_id")
+    @JsonBackReference
+    @JsonIgnore
+    private Organism organism;
 
 
 

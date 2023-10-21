@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -23,12 +24,18 @@ public class OrganismController {
     @Autowired
     private GenomeRepository genomeRepository;
 
-    @PostMapping("/create")
-    public ResponseEntity<Organism> addNewOrganism (@RequestParam int x, @RequestParam int y, @RequestParam int age) {
+    @PostMapping("/")
+    public ResponseEntity<Organism> addNewOrganism (@RequestBody Organism organism) {
         //Genome genome = genomeRepository.findById(genomeId).orElse(null);
-        Genome genome = genomeRepository.save(new Genome(Utils.generateRandomSequence(16)));
+        Genome genome1 = genomeRepository.save(new Genome(Utils.generateRandomSequence(16)));
+        Genome genome2 = genomeRepository.save(new Genome(Utils.generateRandomSequence(16)));
+        List<Genome> genomes = new ArrayList<>();
+        genomes.add(0, genome1);
+        genomes.add(2, genome2);
+
+        organism.setGenomes(genomes);
         //if (genome == null) return ResponseEntity.notFound().build();
-        return new ResponseEntity<>(organismRepository.save(new Organism(genome, x, y, age)), HttpStatus.CREATED);
+        return new ResponseEntity<>(organismRepository.save(organism), HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -49,15 +56,13 @@ public class OrganismController {
     @PatchMapping("/update/{id}")
     public ResponseEntity<Organism> updateOrganism(
             @PathVariable Long id,
-            @RequestParam int x,
-            @RequestParam int y,
-            @RequestParam int age) {
+            @RequestBody Organism updatedOrganism) {
         Organism organism = organismRepository.findById(id)
                 .orElse(null);;
         if (organism == null) return ResponseEntity.notFound().build();
-        organism.setX(x);
-        organism.setY(y);
-        organism.setAge(age);
+        organism.setX(updatedOrganism.getX());
+        organism.setY(updatedOrganism.getY());
+        organism.setAge(updatedOrganism.getAge());
         return ResponseEntity.ok(organism);
     }
 
