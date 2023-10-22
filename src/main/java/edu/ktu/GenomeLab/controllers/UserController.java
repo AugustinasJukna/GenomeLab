@@ -1,6 +1,5 @@
 package edu.ktu.GenomeLab.controllers;
 
-import edu.ktu.GenomeLab.models.Genome;
 import edu.ktu.GenomeLab.models.User;
 import edu.ktu.GenomeLab.models.enums.Role;
 import edu.ktu.GenomeLab.repositories.UserRepository;
@@ -11,8 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-
-import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/users")

@@ -5,17 +5,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "genomes")
-public class Genome {
+@Table(name = "genes")
+public class Gene {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String sequence;
 
-    public Genome() {}
+    public Gene() {}
 
-    public Genome(String sequence) {
+    public Gene(String sequence) {
         this.sequence = sequence;
     }
 
@@ -37,6 +37,14 @@ public class Genome {
     @JsonBackReference
     @JsonIgnore
     private Organism organism;
+
+    public Organism getOrganism() {
+        return organism;
+    }
+
+    public void setOrganism(Organism organism) {
+        this.organism = organism;
+    }
 
 
 

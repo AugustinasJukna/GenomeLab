@@ -1,23 +1,16 @@
 package edu.ktu.GenomeLab.controllers;
 
 import edu.ktu.GenomeLab.models.Environment;
-import edu.ktu.GenomeLab.models.Genome;
+import edu.ktu.GenomeLab.models.Gene;
 import edu.ktu.GenomeLab.models.Organism;
-import edu.ktu.GenomeLab.models.User;
 import edu.ktu.GenomeLab.repositories.EnvironmentRepository;
-import edu.ktu.GenomeLab.repositories.GenomeRepository;
-import edu.ktu.GenomeLab.repositories.OrganismRepository;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(path="/environments")
@@ -82,24 +75,17 @@ public class EnvironmentController {
     }
 
     @GetMapping("/{idEnv}/organisms/{idOrg}")
-    public ResponseEntity<List<Genome>> getAllGenomesByEnvironmentId(@PathVariable Long idEnv, @PathVariable Long idOrg) {
+    public ResponseEntity<List<Gene>> getAllGenomesByEnvironmentId(@PathVariable Long idEnv, @PathVariable Long idOrg) {
         Environment env =  environmentRepository.findById(idEnv).orElse(null);
         if (env == null) return ResponseEntity.notFound().build();
         List<Organism> organisms = env.getOrganisms();
         Organism organism = null;
-        for (int i = 0; i < organisms.size(); i++) {
-            if (Objects.equals(organisms.get(i).getId(), idOrg)) {
-                organism = organisms.get(i);
+        for (Organism value : organisms) {
+            if (Objects.equals(value.getId(), idOrg)) {
+                organism = value;
             }
         }
         if (organism == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(organism.getGenomes());
-    }
-
-    @GetMapping("/genomes/{id}")
-    public ResponseEntity<List<Genome>> getAllGenomesByEnvironmentId(@PathVariable Long id) {
-        List<Genome> genomes = (List<Genome>) environmentRepository.getAllGenomesByEnvironmentId(id);
-        if (genomes.isEmpty()) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(genomes);
     }
 }

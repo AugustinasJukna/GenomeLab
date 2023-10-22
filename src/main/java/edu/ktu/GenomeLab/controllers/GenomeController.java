@@ -1,6 +1,6 @@
 package edu.ktu.GenomeLab.controllers;
 
-import edu.ktu.GenomeLab.models.Genome;
+import edu.ktu.GenomeLab.models.Gene;
 import edu.ktu.GenomeLab.repositories.GenomeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,8 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(path="/genomes")
@@ -18,34 +16,34 @@ public class GenomeController {
     private GenomeRepository genomeRepository;
 
     @PostMapping("/create")
-    public ResponseEntity<Genome>  addNewGenome (@RequestParam String sequence) {
-        return new ResponseEntity<>(genomeRepository.save(new Genome(sequence)), HttpStatus.CREATED);
+    public ResponseEntity<Gene>  addNewGenome (@RequestParam String sequence) {
+        return new ResponseEntity<>(genomeRepository.save(new Gene(sequence)), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public @ResponseBody ResponseEntity<List<Genome>> getAllGenomes()
+    public @ResponseBody ResponseEntity<List<Gene>> getAllGenomes()
     {
-        List<Genome> genomes = (List<Genome>) genomeRepository.findAll();
-        if (genomes.isEmpty()) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(genomes);
+        List<Gene> genes = (List<Gene>) genomeRepository.findAll();
+        if (genes.isEmpty()) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(genes);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Genome> getGenomeById(@PathVariable Long id) {
-        Genome genome = genomeRepository.findById(id).orElse(null);
-        if (genome == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(genome);
+    public ResponseEntity<Gene> getGenomeById(@PathVariable Long id) {
+        Gene gene = genomeRepository.findById(id).orElse(null);
+        if (gene == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(gene);
     }
 
     @PatchMapping("/update/{id}")
-    public ResponseEntity<Genome> updateGenome(
+    public ResponseEntity<Gene> updateGenome(
             @PathVariable Long id,
             @RequestParam String sequence) {
-        Genome genome = genomeRepository.findById(id)
+        Gene gene = genomeRepository.findById(id)
                 .orElse(null);
-        if (genome == null) return ResponseEntity.notFound().build();
-        genome.setSequence(sequence);
-        return new ResponseEntity<>(genomeRepository.save(genome), HttpStatus.OK);
+        if (gene == null) return ResponseEntity.notFound().build();
+        gene.setSequence(sequence);
+        return new ResponseEntity<>(genomeRepository.save(gene), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")

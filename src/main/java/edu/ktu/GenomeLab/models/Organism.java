@@ -14,10 +14,10 @@ public class Organism {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "genome")
+    @OneToMany(mappedBy = "organism")
     @JsonManagedReference
     @JsonIgnore
-    private List<Genome> genomes;
+    private List<Gene> genes;
 
     @Column(name = "x")
     private int x;
@@ -49,12 +49,12 @@ public class Organism {
         this.id = id;
     }
 
-    public List<Genome> getGenomes() {
-        return genomes;
+    public List<Gene> getGenomes() {
+        return genes;
     }
 
-    public void setGenomes(List<Genome> genomes) {
-        this.genomes = genomes;
+    public void setGenomes(List<Gene> genes) {
+        this.genes = genes;
     }
 
     public int getX() {
