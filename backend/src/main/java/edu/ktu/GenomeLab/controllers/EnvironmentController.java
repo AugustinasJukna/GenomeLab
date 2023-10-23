@@ -18,7 +18,7 @@ public class EnvironmentController {
     @Autowired
     private EnvironmentRepository environmentRepository;
 
-    @PostMapping(value="/")
+    @PostMapping()
     public ResponseEntity<Environment> createEnvironment(
             @RequestBody Environment environment
             ) {
