@@ -85,7 +85,7 @@ public class EnvironmentController {
                 organism = value;
             }
         }
-        if (organism == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(organism.getGenomes());
+        if (organism == null || organism.getGenes().isEmpty()) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(organism.getGenes());
     }
 }

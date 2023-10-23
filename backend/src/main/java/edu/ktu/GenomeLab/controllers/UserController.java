@@ -18,7 +18,7 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @PostMapping("/create")
+    @PostMapping()
     public ResponseEntity<User> createUser(@RequestParam String name, @RequestParam String password, @RequestParam String email, @RequestParam Role role) {
         User user = new User(name, password, email, role);
         return new ResponseEntity<>(userRepository.save(user), HttpStatus.CREATED);
@@ -38,7 +38,7 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @PatchMapping("/update/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
         Optional<User> existingUser = userRepository.findById(id);
         if (existingUser.isPresent()) {
@@ -53,7 +53,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteUser(@PathVariable Long id) {
         if (!userRepository.existsById(id)) {
             return ResponseEntity.notFound().build();

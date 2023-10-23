@@ -49,11 +49,11 @@ public class Organism {
         this.id = id;
     }
 
-    public List<Gene> getGenomes() {
+    public List<Gene> getGenes() {
         return genes;
     }
 
-    public void setGenomes(List<Gene> genes) {
+    public void setGenes(List<Gene> genes) {
         this.genes = genes;
     }
 
