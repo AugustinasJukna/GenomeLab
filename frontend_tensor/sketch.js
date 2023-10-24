@@ -2,12 +2,12 @@
 let food = [];
 let foodCount = 350;
 let organisms = [];
-let organismCount = 100;
+let organismCount = 10;
 let generationCount = 1;
 let lastGeneration = 0;
 let stepCounter = 0;
 let fastForward = false;
-const geneticAlgorithm = new GeneticAlgorithm(0.3);
+const geneticAlgorithm = new GeneticAlgorithm(0.5);
 const STEPS_PER_GENERATION = 300;
 
 
@@ -28,8 +28,8 @@ function addFoodSquare() {
     // let startY = random(height)
     let startX = 200;
     let startY = 400;
-    for (let i = 0; i < size; i += 3) {
-        for (let j = 0; j < size; j += 3) {
+    for (let i = 0; i < size; i += 4) {
+        for (let j = 0; j < size; j += 4) {
             let x = startX + i;
             let y = startY + j;
             food.push(createVector(x, y));
@@ -125,12 +125,12 @@ function draw() {
             strokeWeight(2);
             if (Math.abs(lastGeneration - generationCount) > 0 || food.length === 0) {
                 food = [];
-                //addFoodSquare();
-                for (let i = 0; i < foodCount; i++) {
-                    let x = random(width);
-                    let y = random(height);
-                    food.push(createVector(x, y));
-                }
+                addFoodSquare();
+                // for (let i = 0; i < foodCount; i++) {
+                //     let x = random(width);
+                //     let y = random(height);
+                //     food.push(createVector(x, y));
+                // }
             }
             lastGeneration = generationCount;
 

@@ -1,0 +1,77 @@
+[
+  {
+    "id": 2,
+    "name": "UpdatedSampleEnvironmentName",
+    "description": "UpdatedSampleDescription",
+    "organisms": [
+      {
+        "id": 1,
+        "genome": {
+          "id": 1,
+          "sequence": "010100001110111"
+        },
+        "x": 1,
+        "y": 1,
+        "age": 10
+      },
+      {
+        "id": 3,
+        "genome": {
+          "id": 3,
+          "sequence": "010100001110011"
+        },
+        "x": 1,
+        "y": 2,
+        "age": 10
+      },
+      {
+        "id": 4,
+        "genome": {
+          "id": 7,
+          "sequence": "010100001110001"
+        },
+        "x": 2,
+        "y": 3,
+        "age": 1
+      },
+      {
+        "id": 5,
+        "genome": {
+          "id": 4,
+          "sequence": "010100011110000"
+        },
+        "x": 5,
+        "y": 3,
+        "age": 2
+      },
+      {
+        "id": 6,
+        "genome": {
+          "id": 8,
+          "sequence": "010100001110000"
+        },
+        "x": 1,
+        "y": 1,
+        "age": 1
+      },
+      {
+        "id": 7,
+        "genome": {
+          "id": 5,
+          "sequence": "010100001110000"
+        },
+        "x": 1,
+        "y": 1,
+        "age": 2
+      }
+    ],
+    "mutationCoefficient": 0.6
+  },
+  {
+    "id": 4,
+    "name": "SampleEnvironmentName",
+    "description": "SampleDescription",
+    "organisms": [],
+    "mutationCoefficient": 0.5
+  }
+]

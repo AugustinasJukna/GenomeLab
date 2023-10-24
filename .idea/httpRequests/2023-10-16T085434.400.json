@@ -1,0 +1,6 @@
+{
+  "timestamp": "2023-10-16T05:54:34.163+00:00",
+  "status": 400,
+  "error": "Bad Request",
+  "path": "/users/update/1"
+}

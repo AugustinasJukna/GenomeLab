@@ -1,0 +1,7 @@
+{
+  "id": 5,
+  "name": "SampleEnvironmentName",
+  "description": "SampleDescription",
+  "organisms": null,
+  "mutationCoefficient": 0.5
+}

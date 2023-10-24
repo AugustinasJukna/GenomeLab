@@ -1,0 +1,565 @@
+POST http://localhost:8080/environments/create
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 80
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+name=SampleEnvironmentName&description=SampleDescription&mutationCoefficient=0.5
+
+<> 2023-10-16T173653.201.json
+
+###
+
+GET http://localhost:8080/environments
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-16T173527.200.json
+
+###
+
+GET http://localhost:8080/users/genome
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-16T085818.200.json
+
+###
+
+PATCH http://localhost:8080/users/update/5
+Content-Type: application/json
+Content-Length: 111
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "name": "JaneDoe",
+  "password": "newPassword456",
+  "email": "janedoe@email.com",
+  "role": "RESEARCHER"
+}
+
+<> 2023-10-16T085755.200.json
+
+###
+
+POST http://localhost:8080/users/create
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 76
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+name=JohnDoe&password=securePassword123&email=johndoe%40email.com&role=ADMIN
+
+<> 2023-10-16T085748.201.json
+
+###
+
+PATCH http://localhost:8080/users/update/4
+Content-Type: application/json
+Content-Length: 111
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "name": "JaneDoe",
+  "password": "newPassword456",
+  "email": "janedoe@email.com",
+  "role": "RESEARCHER"
+}
+
+###
+
+GET http://localhost:8080/users/genome
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-16T085522.200.json
+
+###
+
+DELETE http://localhost:8080/users/delete/4
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
+PATCH http://localhost:8080/users/update/4
+Content-Type: application/json
+Content-Length: 105
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "name": "JaneDoe",
+  "password": "newPassword456",
+  "email": "janedoe@email.com",
+  "role": "USER"
+}
+
+<> 2023-10-16T085440.400.json
+
+###
+
+PATCH http://localhost:8080/users/update/1
+Content-Type: application/json
+Content-Length: 105
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "name": "JaneDoe",
+  "password": "newPassword456",
+  "email": "janedoe@email.com",
+  "role": "USER"
+}
+
+<> 2023-10-16T085434.400.json
+
+###
+
+PATCH http://localhost:8080/users/update/1
+Content-Type: application/json
+Content-Length: 105
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "name": "JaneDoe",
+  "password": "newPassword456",
+  "email": "janedoe@email.com",
+  "role": "USER"
+}
+
+<> 2023-10-16T085432.400.json
+
+###
+
+PATCH http://localhost:8080/users/update/4
+Content-Type: application/json
+Content-Length: 105
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "name": "JaneDoe",
+  "password": "newPassword456",
+  "email": "janedoe@email.com",
+  "role": "USER"
+}
+
+<> 2023-10-16T085426.400.json
+
+###
+
+PATCH http://localhost:8080/users/update/4
+Content-Type: application/json
+Content-Length: 105
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "name": "JaneDoe",
+  "password": "newPassword456",
+  "email": "janedoe@email.com",
+  "role": "USER"
+}
+
+<> 2023-10-16T085120.400.json
+
+###
+
+GET http://localhost:8080/users/1
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-16T085102.200.json
+
+###
+
+GET http://localhost:8080/users
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-16T085057.200.json
+
+###
+
+POST http://localhost:8080/users/create
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 76
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+name=JohnDoe&password=securePassword123&email=johndoe%40email.com&role=ADMIN
+
+<> 2023-10-16T085047.201.json
+
+###
+
+GET http://localhost:8080/environments/genomes/2
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-16T084055.200.json
+
+###
+
+DELETE http://localhost:8080/genomes/delete/10
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
+DELETE http://localhost:8080/genomes/delete/10
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
+PATCH http://localhost:8080/genomes/update/1
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 24
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+sequence=010100001110111
+
+<> 2023-10-16T012228.200.json
+
+###
+
+GET http://localhost:8080/genomes/1
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-16T012216.200.json
+
+###
+
+GET http://localhost:8080/genomes
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-16T012210.200.json
+
+###
+
+POST http://localhost:8080/genomes/create
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 24
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+sequence=010100001110000
+
+<> 2023-10-16T011847.200.json
+
+###
+
+DELETE http://localhost:8080/organisms/delete/15
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
+POST http://localhost:8080/organisms/create
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 15
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+x=10&y=10&age=5
+
+<> 2023-10-16T011440.201.json
+
+###
+
+POST http://localhost:8080/organisms/create
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 26
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+genomeId=1&x=10&y=10&age=5
+
+<> 2023-10-16T010849.500.json
+
+###
+
+PATCH http://localhost:8080/organisms/update/1
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 16
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+x=15&y=15&age=10
+
+<> 2023-10-16T010817.200.json
+
+###
+
+GET http://localhost:8080/organisms/1
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-16T010815.200.json
+
+###
+
+PATCH http://localhost:8080/organisms/update/1
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 16
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+x=15&y=15&age=10
+
+<> 2023-10-16T010655.400.json
+
+###
+
+GET http://localhost:8080/organisms/1
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-16T010625.200.json
+
+###
+
+GET http://localhost:8080/organisms
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-16T010605.200.json
+
+###
+
+POST http://localhost:8080/organisms/create
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 26
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+genomeId=1&x=10&y=10&age=5
+
+<> 2023-10-16T010224.500.json
+
+###
+
+POST http://localhost:8080/organisms/add
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 26
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+genomeId=1&x=10&y=10&age=5
+
+<> 2023-10-16T005704.500.json
+
+###
+
+POST http://localhost:8080/organisms/add
+Content-Type: application/x-www-form-urlencoded
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 26
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+genomeId=1&x=10&y=10&age=5
+
+<> 2023-10-16T005639.500.json
+
+###
+
+POST http://localhost:8080/environments/create
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 80
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+name=SampleEnvironmentName&description=SampleDescription&mutationCoefficient=0.5
+
+<> 2023-10-16T005451.201.json
+
+###
+
+POST http://localhost:8080/organisms/add
+Content-Type: application/x-www-form-urlencoded
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 26
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+genomeId=1&x=10&y=10&age=5
+
+<> 2023-10-14T191214.500.json
+
+###
+
+POST http://localhost:8080/organisms/add
+Content-Type: application/x-www-form-urlencoded
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 26
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+genomeId=1&x=10&y=10&age=5
+
+<> 2023-10-14T191012.500.json
+
+###
+
+POST http://localhost:8080/organisms/add
+Content-Type: application/x-www-form-urlencoded
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 26
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+genomeId=1&x=10&y=10&age=5
+
+<> 2023-10-14T190959.500.json
+
+###
+
+GET http://localhost:8080/environments/2
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-14T185709.200.json
+
+###
+
+GET http://localhost:8080/environments/getAllGenomesByEnvironmentId/2
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-14T183545.200.json
+
+###
+
+GET http://localhost:8080/environments/getAllGenomesByEnvironmentId/2
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
+GET http://localhost:8080/environments/getAllGenomesByEnvironmentId/1
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
+GET http://localhost:8080/environments/2
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-14T183450.200.json
+
+###
+
+GET http://localhost:8080/environments/1
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
+GET http://localhost:8080/environments/2
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-14T183440.200.json
+
+###
+
+PATCH http://localhost:8080/environments/update/2
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 94
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+name=UpdatedSampleEnvironmentName&description=UpdatedSampleDescription&mutationCoefficient=0.6
+
+<> 2023-10-14T183423.200.json
+
+###
+
+DELETE http://localhost:8080/environments/delete/3
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
+GET http://localhost:8080/environments/getAllGenomesByEnvironmentId/1
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
+DELETE http://localhost:8080/environments/delete/1
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
+PATCH http://localhost:8080/environments/update/1
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 94
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8.1)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+name=UpdatedSampleEnvironmentName&description=UpdatedSampleDescription&mutationCoefficient=0.7
+
+###
+

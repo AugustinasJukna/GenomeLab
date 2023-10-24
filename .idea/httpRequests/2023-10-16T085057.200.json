@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "name": "aa",
+    "password": "aa",
+    "email": "a",
+    "role": "RESEARCHER"
+  },
+  {
+    "id": 2,
+    "name": "a",
+    "password": "aaBB",
+    "email": null,
+    "role": null
+  },
+  {
+    "id": 3,
+    "name": "vardas",
+    "password": "pw",
+    "email": "augustinas.jukna@gmail.com",
+    "role": "ADMIN"
+  },
+  {
+    "id": 4,
+    "name": "JohnDoe",
+    "password": "securePassword123",
+    "email": "johndoe@email.com",
+    "role": "ADMIN"
+  }
+]

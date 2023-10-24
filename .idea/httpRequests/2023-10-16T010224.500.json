@@ -1,0 +1,6 @@
+{
+  "timestamp": "2023-10-15T22:02:24.857+00:00",
+  "status": 500,
+  "error": "Internal Server Error",
+  "path": "/organisms/create"
+}

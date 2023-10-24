@@ -52,8 +52,11 @@ class GeneticAlgorithm {
         while (newGeneration.length < this.populationSize) {
             let parentA = this.rouletteWheelSelection(organisms, totalFitness);
             let parentB = this.rouletteWheelSelection(organisms, totalFitness);
-            while (parentB === parentA) {
+            let count = 0;
+            while (parseFloat(parentB.id) === parseFloat(parentA.id)) {
+                if (count > 1000) break;
                 parentB = this.rouletteWheelSelection(organisms, totalFitness);
+                count++;
             }
             let child = parentA.crossover(parentB);
             child.mutate(this.mutationRate);

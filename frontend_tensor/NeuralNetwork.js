@@ -96,7 +96,11 @@ class NeuralNetwork {
                 let values = tensor.dataSync().slice();
                 for (let j = 0; j < values.length; j++) {
                     if (random(1) < rate) {
-                        values[j] += randomGaussian();
+                        let rnd = randomGaussian();
+                        while (rnd === 0){
+                            rnd = randomGaussian();
+                        }
+                        values[j] += rnd;
                     }
                 }
                 let newTensor = tf.tensor(values, shape);

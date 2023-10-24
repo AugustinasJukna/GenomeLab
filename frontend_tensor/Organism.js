@@ -6,6 +6,7 @@ class Organism {
         this.neuralNetwork = new NeuralNetwork(4, 4, 2);
         this.energy = 100;
         this.lifetime = 0;
+        this.id = random(1000000);
     }
 
     display() {
@@ -33,12 +34,13 @@ class Organism {
             if (d < this.size / 2) {
                 food.splice(i, 1);
                 this.energy += 10;
-                this.size += 1;
+                this.size += 0.1;
             }
         }
     }
 
     nearestFood() {
+        if (food.length === 0) return [0, 0, 0];
         let min_dist = Math.sqrt((this.pos.x - food[0].x) * (this.pos.x - food[0].x) + (this.pos.y - food[0].y) * (this.pos.y - food[0].y));
         let nearestFood = food[0];
         for (let i = 0; i < food.length; i++) {
