@@ -46,9 +46,9 @@ public class EnvironmentController {
             @RequestBody Environment updatedEnvironment) {
         return environmentRepository.findById(id)
                 .map(environment -> {
-                    environment.setName(updatedEnvironment.getName());
-                    environment.setDescription(updatedEnvironment.getDescription());
-                    environment.setMutationCoefficient(updatedEnvironment.getMutationCoefficient());
+                    environment.setName(updatedEnvironment.getName() == null ? environment.getName() : updatedEnvironment.getName());
+                    environment.setDescription(updatedEnvironment.getDescription() == null ? environment.getDescription() : updatedEnvironment.getDescription());
+                    environment.setMutationCoefficient(updatedEnvironment.getMutationCoefficient() == 0 ? environment.getMutationCoefficient() : updatedEnvironment.getMutationCoefficient());
                     return new ResponseEntity<Environment>(environmentRepository.save(environment), HttpStatus.OK);
                 })
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -75,7 +75,22 @@ public class EnvironmentController {
     }
 
     @GetMapping("/{idEnv}/organisms/{idOrg}")
-    public ResponseEntity<List<Gene>> getAllGenomesByEnvironmentId(@PathVariable Long idEnv, @PathVariable Long idOrg) {
+    public ResponseEntity<Organism> getOrganismByEnvIdAndOrgId(@PathVariable Long idEnv, @PathVariable Long idOrg) {
+        Environment env =  environmentRepository.findById(idEnv).orElse(null);
+        if (env == null) return ResponseEntity.notFound().build();
+        List<Organism> organisms = env.getOrganisms();
+        Organism organism = null;
+        for (Organism value : organisms) {
+            if (Objects.equals(value.getId(), idOrg)) {
+                organism = value;
+            }
+        }
+        if (organism == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(organism);
+    }
+
+    @GetMapping("/{idEnv}/organisms/{idOrg}/genes")
+    public ResponseEntity<List<Gene>> getAllGenesByEnvironmentId(@PathVariable Long idEnv, @PathVariable Long idOrg) {
         Environment env =  environmentRepository.findById(idEnv).orElse(null);
         if (env == null) return ResponseEntity.notFound().build();
         List<Organism> organisms = env.getOrganisms();
