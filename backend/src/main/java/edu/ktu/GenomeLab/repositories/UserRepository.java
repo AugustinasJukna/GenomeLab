@@ -1,11 +1,13 @@
 package edu.ktu.GenomeLab.repositories;
 import edu.ktu.GenomeLab.models.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface UserRepository extends CrudRepository<User, Long> {
+public interface UserRepository extends CrudRepository<User, Long>, JpaRepository<User, Long> {
     @Query(value = "SELECT joined.sequence, COUNT(*) AS sequence_count " +
             "FROM (SELECT e.id AS environment_id, g.sequence " +
             "FROM environment e " +
@@ -16,5 +18,5 @@ public interface UserRepository extends CrudRepository<User, Long> {
             "LIMIT 1", nativeQuery = true)
     List<Object[]> getMostCommonGenomeInAllEnvironments();
 
-
+    Optional<User> findByEmail(String email);
 }
