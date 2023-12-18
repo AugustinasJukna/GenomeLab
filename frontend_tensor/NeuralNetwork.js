@@ -32,14 +32,14 @@ class NeuralNetwork {
         const hidden = tf.layers.dense({
             units: this.hidden_nodes,
             inputShape: [this.input_nodes],
-            activation: 'sigmoid'
+            activation: 'relu'
         });
         model.add(hidden);
         let activations = ['sigmoid', 'relu', 'tanh'];
 
         const output = tf.layers.dense({
             units: this.output_nodes,
-            activation: random(activations)
+            activation: 'sigmoid'
         });
         model.add(output);
         return model;
@@ -73,15 +73,20 @@ class NeuralNetwork {
                 let values = [];
                 for (let j = 0; j < valuesA.length; j++) {
                     if (random(1) < 0.5) {
-                        values[j] = valuesA[j];
+                        values.push(valuesA[j]);
                     } else {
-                        values[j] = valuesB[j];
+                        values.push(valuesB[j]);
                     }
                 }
                 let newTensor = tf.tensor(values, shape);
-                childWeights[i] = newTensor;
+                childWeights.push(newTensor);
             }
-            child.setWeights(childWeights);
+            //child.setWeights(childWeights);
+            if (random(1) < 0.5) {
+                child.setWeights(parentAWeights);
+            } else {
+                child.setWeights(parentBWeights);
+            }
             return new NeuralNetwork(child, this.input_nodes, this.hidden_nodes, this.output_nodes);
         });
     }
@@ -107,6 +112,7 @@ class NeuralNetwork {
                 mutatedWeights[i] = newTensor;
             }
             this.model.setWeights(mutatedWeights);
+            console.log("mutated")
         });
     }
 }

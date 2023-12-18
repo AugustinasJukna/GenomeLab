@@ -48,24 +48,22 @@ class GeneticAlgorithm {
     newGeneration(organisms) {
         let totalFitness = this.calculatePopulationFitness(organisms);
         let newGeneration = [];
-        console.log("old " + organisms.length)
-        while (newGeneration.length < this.populationSize) {
+        while (newGeneration.length < this.populationSize - this.populationSize * 0.1) {
             let parentA = this.rouletteWheelSelection(organisms, totalFitness);
-            let parentB = this.rouletteWheelSelection(organisms, totalFitness);
-            let count = 0;
-            while (parseFloat(parentB.id) === parseFloat(parentA.id)) {
-                if (count > 1000) break;
-                parentB = this.rouletteWheelSelection(organisms, totalFitness);
-                count++;
-            }
-            let child = parentA.crossover(parentB);
+            //let parentB = this.rouletteWheelSelection(organisms, totalFitness);
+            //console.log(parentA)
+            //console.log(parentB)
+
+            let child = parentA.crossover(parentA);
             child.mutate(this.mutationRate);
             newGeneration.push(child);
+        }
+        while (newGeneration.length < this.populationSize) {
+            newGeneration.push(new Organism())
         }
         for (let i = 0; i < organisms.length; i++) {
             organisms[i].neuralNetwork.dispose();
         }
-        console.log("new " + newGeneration.length)
         return newGeneration;
     }
 }

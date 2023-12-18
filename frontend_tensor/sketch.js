@@ -7,8 +7,9 @@ let generationCount = 1;
 let lastGeneration = 0;
 let stepCounter = 0;
 let fastForward = false;
-const geneticAlgorithm = new GeneticAlgorithm(0.5);
-const STEPS_PER_GENERATION = 300;
+const geneticAlgorithm = new GeneticAlgorithm(0.2);
+const STEPS_PER_GENERATION = 500;
+food = [];
 
 
 
@@ -123,14 +124,13 @@ function draw() {
 
             stroke(0, 255, 0);
             strokeWeight(2);
-            if (Math.abs(lastGeneration - generationCount) > 0 || food.length === 0) {
-                food = [];
-                addFoodSquare();
-                // for (let i = 0; i < foodCount; i++) {
-                //     let x = random(width);
-                //     let y = random(height);
-                //     food.push(createVector(x, y));
-                // }
+            if (Math.abs(lastGeneration - generationCount) > 0 || food.length < foodCount) {
+                //addFoodSquare();
+                while (food.length < foodCount) {
+                    let x = random(width);
+                    let y = random(height);
+                    food.push(createVector(x, y));
+                }
             }
             lastGeneration = generationCount;
 
@@ -145,9 +145,7 @@ function draw() {
             text(`Generation: ${generationCount}`, 10, height - 20);
             stepCounter++;
             if (stepCounter >= STEPS_PER_GENERATION || organisms.length === 10) {
-                console.log(organisms)
                 organisms = geneticAlgorithm.newGeneration(organisms).slice();
-                console.log(organisms[0].energy)
                 stepCounter = 0;
                 generationCount++;
             }

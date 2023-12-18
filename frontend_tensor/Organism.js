@@ -33,8 +33,8 @@ class Organism {
             let d = Math.sqrt((this.pos.x - food[i].x) * (this.pos.x - food[i].x) + (this.pos.y - food[i].y) * (this.pos.y - food[i].y));
             if (d < this.size / 2) {
                 food.splice(i, 1);
-                this.energy += 10;
-                this.size += 0.1;
+                this.energy += 20;
+                this.size += 1;
             }
         }
     }
@@ -70,7 +70,8 @@ class Organism {
         let move;
         move = createVector(dx, dy);
         this.pos.add(move);
-        this.energy -= 0.35;
+        this.energy -= 0.2;
+
         this.checkBorders();
         this.eat();
         // if (eatSignal > doNotEatSignal) {
