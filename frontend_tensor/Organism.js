@@ -1,18 +1,27 @@
 class Organism {
     constructor() {
         this.pos = createVector(random(width), random(height));
-        this.size = 4;
+        this.size = 8;
         this.color = color(255, 255, 255);
-        this.neuralNetwork = new NeuralNetwork(4, 4, 2);
+        this.neuralNetwork = new NeuralNetwork(3, 2, 2);
         this.energy = 100;
         this.lifetime = 0;
         this.id = random(1000000);
+        this.heading = 0;
     }
 
     display() {
         fill(this.color);
         noStroke();
         ellipse(this.pos.x, this.pos.y, this.size);
+
+        // Display current direction lines
+        let directionLength = 15;
+        let directionX = this.pos.x + directionLength * cos(this.heading);
+        let directionY = this.pos.y + directionLength * sin(this.heading);
+
+        stroke(255, 0, 0);  // Red color for direction lines
+        line(this.pos.x, this.pos.y, directionX, directionY);
     }
 
     checkBorders() {
@@ -34,7 +43,6 @@ class Organism {
             if (d < this.size / 2) {
                 food.splice(i, 1);
                 this.energy += 20;
-                this.size += 1;
             }
         }
     }
@@ -61,23 +69,31 @@ class Organism {
         let normalizedDist = min_dist / Math.sqrt(width * width + height * height);
         let relativeFoodX = (nearestFoodX - this.pos.x) / width;
         let relativeFoodY = (nearestFoodY - this.pos.y) / height;
+
+        let rotationAngle = atan2(relativeFoodY, relativeFoodX) - atan2(0, 1);
+        let normalizedRotation = (rotationAngle + PI) / (2 * PI);
+
+
         let theta = atan2(relativeFoodY, relativeFoodX);
         let normalizedTheta = (theta + PI) / (2 * PI);
         let normalizedX = this.pos.x / width;
         let normalizedY = this.pos.y / height;
-        let input = [relativeFoodX, relativeFoodY, normalizedDist, normalizedTheta];
-        let [dx, dy] = this.neuralNetwork.predict(input);
+        //let input = [relativeFoodX, relativeFoodY, normalizedDist, normalizedTheta];
+        let input = [normalizedRotation, relativeFoodX, relativeFoodY];
+        let [rotation, acceleration] = this.neuralNetwork.predict(input);
+        let rotationSpeed = 0.04;
+        this.heading += rotation * rotationSpeed;
+
+        let dx = cos(this.heading) * acceleration;
+        let dy = sin(this.heading) * acceleration;
         let move;
         move = createVector(dx, dy);
         this.pos.add(move);
-        this.energy -= 0.2;
+        this.energy -= 0.25;
 
         this.checkBorders();
         this.eat();
-        // if (eatSignal > doNotEatSignal) {
-        //     this.eat();
-        // }
-
+        this.heading = atan2(dy, dx);
     }
 
     age() {

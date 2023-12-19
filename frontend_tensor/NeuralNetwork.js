@@ -39,7 +39,7 @@ class NeuralNetwork {
 
         const output = tf.layers.dense({
             units: this.output_nodes,
-            activation: 'sigmoid'
+            activation: 'tanh'
         });
         model.add(output);
         return model;
@@ -72,21 +72,13 @@ class NeuralNetwork {
                 let valuesB = tensorB.dataSync().slice();
                 let values = [];
                 for (let j = 0; j < valuesA.length; j++) {
-                    if (random(1) < 0.5) {
-                        values.push(valuesA[j]);
-                    } else {
-                        values.push(valuesB[j]);
-                    }
+                    let alpha = random();
+                    values.push((1 - alpha) * valuesA[j] + alpha * valuesB[j]);
                 }
                 let newTensor = tf.tensor(values, shape);
                 childWeights.push(newTensor);
             }
-            //child.setWeights(childWeights);
-            if (random(1) < 0.5) {
-                child.setWeights(parentAWeights);
-            } else {
-                child.setWeights(parentBWeights);
-            }
+            child.setWeights(childWeights);
             return new NeuralNetwork(child, this.input_nodes, this.hidden_nodes, this.output_nodes);
         });
     }

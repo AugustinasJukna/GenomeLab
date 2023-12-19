@@ -1,13 +1,13 @@
 
 let food = [];
-let foodCount = 350;
+let foodCount = 200;
 let organisms = [];
 let organismCount = 10;
 let generationCount = 1;
 let lastGeneration = 0;
 let stepCounter = 0;
 let fastForward = false;
-const geneticAlgorithm = new GeneticAlgorithm(0.2);
+const geneticAlgorithm = new GeneticAlgorithm(0.3);
 const STEPS_PER_GENERATION = 500;
 food = [];
 
@@ -44,8 +44,7 @@ function die(i) {
         return true;
 
     }
-    if (organisms[i].energy <= 0) {
-        console.log("undefined")
+    if (organisms[i].energy < 0) {
         organisms.splice(i, 1);
         return true;
     }
@@ -150,7 +149,7 @@ function draw() {
                 generationCount++;
             }
             stroke(0, 255, 0);
-            strokeWeight(2);
+            strokeWeight(6);
             for (let i = 0; i < food.length; i++) {
                 point(food[i].x, food[i].y);
             }

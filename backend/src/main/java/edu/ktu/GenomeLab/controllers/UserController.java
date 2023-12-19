@@ -3,6 +3,7 @@ package edu.ktu.GenomeLab.controllers;
 import edu.ktu.GenomeLab.models.User;
 import edu.ktu.GenomeLab.models.enums.Role;
 import edu.ktu.GenomeLab.repositories.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
 
     @Autowired
@@ -32,8 +34,8 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        User user = userRepository.findById(id).orElse(null);
+    public ResponseEntity<User> getUserById(@PathVariable String id) {
+        User user = userRepository.findByEmail(id).orElse(null);
         if (user == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(user);
     }

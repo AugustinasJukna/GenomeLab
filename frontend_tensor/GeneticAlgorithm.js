@@ -3,6 +3,7 @@ class GeneticAlgorithm {
         this.mutationRate = mutationRate;
         this.topFitnessScore = 0;
         this.populationSize = 100;
+        this.bestFitnessHistory = []; 
     }
 
     rouletteWheelSelection(population, tfit) {
@@ -17,12 +18,8 @@ class GeneticAlgorithm {
     }
 
     calculateFitness(organisms) {
-        let sum = 0;
         for (let o of organisms) {
-            sum += o.energy;
-        }
-        for (let o of organisms) {
-            o.fitness = o.energy / sum;
+            o.fitness = o.energy + o.lifetime;
         }
     }
 
@@ -38,6 +35,7 @@ class GeneticAlgorithm {
             }
             if (bestOfGeneration.fitness > this.topFitnessScore) {
                 this.topFitnessScore = bestOfGeneration.fitness;
+                this.bestFitnessHistory.push(this.topFitnessScore);
             }
 
         }
@@ -48,22 +46,28 @@ class GeneticAlgorithm {
     newGeneration(organisms) {
         let totalFitness = this.calculatePopulationFitness(organisms);
         let newGeneration = [];
-        while (newGeneration.length < this.populationSize - this.populationSize * 0.1) {
+
+        let eliteCount = Math.round(this.populationSize * 0.1);
+        let sortedOrganisms = organisms.slice().sort((a, b) => b.fitness - a.fitness);
+        let elites = sortedOrganisms.slice(0, eliteCount);
+        newGeneration.push(...elites);
+
+        while (newGeneration.length < this.populationSize - eliteCount) {
             let parentA = this.rouletteWheelSelection(organisms, totalFitness);
-            //let parentB = this.rouletteWheelSelection(organisms, totalFitness);
+            let parentB = this.rouletteWheelSelection(organisms, totalFitness);
             //console.log(parentA)
             //console.log(parentB)
 
-            let child = parentA.crossover(parentA);
+            let child = parentA.crossover(parentB);
             child.mutate(this.mutationRate);
             newGeneration.push(child);
         }
         while (newGeneration.length < this.populationSize) {
             newGeneration.push(new Organism())
         }
-        for (let i = 0; i < organisms.length; i++) {
-            organisms[i].neuralNetwork.dispose();
-        }
+        // for (let i = 0; i < organisms.length; i++) {
+        //     organisms[i].neuralNetwork.dispose();
+        // }
         return newGeneration;
     }
 }
