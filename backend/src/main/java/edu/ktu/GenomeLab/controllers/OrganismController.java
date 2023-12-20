@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path="/organisms")
+@RequestMapping(path="api/v1/organisms")
 public class OrganismController {
     @Autowired
     private OrganismRepository organismRepository;

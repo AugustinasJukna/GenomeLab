@@ -35,7 +35,7 @@ export default {
     };
   },
   created() {
-    this.getUser();
+    console.log(this.getUser());
     if(localStorage.getItem('token') == "" || localStorage.getItem('token') == null){
       this.$router.push('/')
     }else {
@@ -56,15 +56,8 @@ export default {
     },
 
     logoutAction () {
-      axios.post('/api/logout',{}, { headers:{Authorization: 'Bearer ' + localStorage.getItem('token')}})
-          .then((r) => {
             localStorage.setItem('token', "")
             this.$router.push('/')
-            return r
-          })
-          .catch((e) => {
-            return e
-          });
     }
 
   },

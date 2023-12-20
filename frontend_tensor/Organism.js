@@ -5,6 +5,7 @@ class Organism {
         this.color = color(255, 255, 255);
         this.neuralNetwork = new NeuralNetwork(3, 2, 2);
         this.energy = 100;
+        this.brainSize = 2;
         this.lifetime = 0;
         this.id = random(1000000);
         this.heading = 0;
@@ -89,7 +90,7 @@ class Organism {
         let move;
         move = createVector(dx, dy);
         this.pos.add(move);
-        this.energy -= 0.25;
+        this.energy -= 0.20;
 
         this.checkBorders();
         this.eat();

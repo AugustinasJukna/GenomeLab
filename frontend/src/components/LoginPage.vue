@@ -82,7 +82,7 @@ export default {
         email: this.email,
         password: this.password,
       }
-      axios.post('/auth/login', payload)
+      axios.post('/auth/authenticate', payload)
           .then(response => {
             localStorage.setItem('token', response.data.token)
             localStorage.setItem('username', this.email)

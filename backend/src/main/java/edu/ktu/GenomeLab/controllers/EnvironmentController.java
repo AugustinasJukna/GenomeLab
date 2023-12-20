@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Objects;
 
 @RestController
-@RequestMapping(path="/environments")
+@RequestMapping(path="api/v1/environments")
 public class EnvironmentController {
     @Autowired
     private EnvironmentRepository environmentRepository;

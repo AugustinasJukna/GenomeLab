@@ -2,8 +2,8 @@ class GeneticAlgorithm {
     constructor(mutationRate) {
         this.mutationRate = mutationRate;
         this.topFitnessScore = 0;
-        this.populationSize = 100;
-        this.bestFitnessHistory = []; 
+        this.populationSize = 50;
+        this.bestFitnessHistory = [];
     }
 
     rouletteWheelSelection(population, tfit) {
@@ -52,11 +52,12 @@ class GeneticAlgorithm {
         let elites = sortedOrganisms.slice(0, eliteCount);
         newGeneration.push(...elites);
 
+
         while (newGeneration.length < this.populationSize - eliteCount) {
             let parentA = this.rouletteWheelSelection(organisms, totalFitness);
             let parentB = this.rouletteWheelSelection(organisms, totalFitness);
-            //console.log(parentA)
-            //console.log(parentB)
+            console.log('1 ' + parentA)
+            console.log('2 ' + parentB)
 
             let child = parentA.crossover(parentB);
             child.mutate(this.mutationRate);
@@ -65,9 +66,15 @@ class GeneticAlgorithm {
         while (newGeneration.length < this.populationSize) {
             newGeneration.push(new Organism())
         }
-        // for (let i = 0; i < organisms.length; i++) {
-        //     organisms[i].neuralNetwork.dispose();
-        // }
+        for (let i = 0; i < organisms.length; i++) {
+            console.log(organisms[i])
+            tf.tidy(() => {
+                if (organisms[i].neuralNetwork) {
+                    organisms[i].neuralNetwork.dispose();
+                }
+            });
+        }
+
         return newGeneration;
     }
 }

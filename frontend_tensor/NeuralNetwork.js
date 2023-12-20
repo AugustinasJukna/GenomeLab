@@ -28,21 +28,23 @@ class NeuralNetwork {
     }
 
     createModel() {
-        const model = tf.sequential();
-        const hidden = tf.layers.dense({
-            units: this.hidden_nodes,
-            inputShape: [this.input_nodes],
-            activation: 'relu'
-        });
-        model.add(hidden);
-        let activations = ['sigmoid', 'relu', 'tanh'];
+        return tf.tidy(() => {
+            const model = tf.sequential();
+            const hidden = tf.layers.dense({
+                units: this.hidden_nodes,
+                inputShape: [this.input_nodes],
+                activation: 'relu'
+            });
+            model.add(hidden);
+            let activations = ['sigmoid', 'relu', 'tanh'];
 
-        const output = tf.layers.dense({
-            units: this.output_nodes,
-            activation: 'tanh'
+            const output = tf.layers.dense({
+                units: this.output_nodes,
+                activation: 'tanh'
+            });
+            model.add(output);
+            return model;
         });
-        model.add(output);
-        return model;
     }
 
     copy() {
@@ -76,7 +78,7 @@ class NeuralNetwork {
                     values.push((1 - alpha) * valuesA[j] + alpha * valuesB[j]);
                 }
                 let newTensor = tf.tensor(values, shape);
-                childWeights.push(newTensor);
+                childWeights[i] = newTensor;
             }
             child.setWeights(childWeights);
             return new NeuralNetwork(child, this.input_nodes, this.hidden_nodes, this.output_nodes);
@@ -94,7 +96,7 @@ class NeuralNetwork {
                 for (let j = 0; j < values.length; j++) {
                     if (random(1) < rate) {
                         let rnd = randomGaussian();
-                        while (rnd === 0){
+                        while (rnd === 0) {
                             rnd = randomGaussian();
                         }
                         values[j] += rnd;
