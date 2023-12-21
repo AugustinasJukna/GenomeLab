@@ -10,6 +10,10 @@ import DashboardPage from './components/DashboardPage.vue';
 import EnvironmentList from "@/components/EnvironmentList.vue";
 import EnvironmentCreate from "@/components/EnvironmentCreate.vue";
 import EnvironmentEdit from "@/components/EnvironmentEdit.vue";
+import EnvironmentView from "@/components/EnvironmentView.vue";
+import P5Sketch from "@/components/Main.vue";
+import Main from "@/components/Main.vue";
+import StateCreate from "@/components/StateCreate.vue";
 
 //axios.defaults.baseURL = import.meta.env.VITE_APP_API_URL
 axios.defaults.baseURL = 'http://localhost:8080/api/v1';
@@ -23,12 +27,15 @@ console.log(import.meta.env.VITE_APP_API_KEY)
 const router = createRouter({
     history: createWebHistory(),
     routes: [
-        { path: '/', component: LoginPage },
+        { path: '/', component: Main },
+        { path: '/login', component: LoginPage },
         { path: '/register', component: RegisterPage },
         { path: '/dashboard', component: DashboardPage },
         {path: '/environments', component: EnvironmentList},
         { path: '/environments/new', component: EnvironmentCreate },
         { path: '/environments/edit/:id', component: EnvironmentEdit },
+        { path: '/environments/view/:id', component: EnvironmentView },
+        { path: '/states/create/:id', component: StateCreate },
     ],
 });
 

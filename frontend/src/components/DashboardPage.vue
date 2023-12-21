@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     getUser() {
-      axios.get('http://localhost:8080/users/' + localStorage.getItem('username'), { headers:{Authorization: 'Bearer ' + localStorage.getItem('token')}})
+      axios.get(`http://localhost:8080/api/v1/users/` + localStorage.getItem('username'),  { headers:{Authorization: 'Bearer ' + localStorage.getItem('token')}})
           .then((r) => {
             this.user = r.data;
             return r

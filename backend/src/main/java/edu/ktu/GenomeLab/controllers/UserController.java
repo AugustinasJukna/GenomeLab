@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -34,8 +34,15 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable String id) {
-        User user = userRepository.findByEmail(id).orElse(null);
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+        User user = userRepository.findById(id).orElse(null);
+        if (user == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/byEmail/{email}")
+    public ResponseEntity<User> getUserById(@PathVariable String email) {
+        User user = userRepository.findByEmail(email).orElse(null);
         if (user == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(user);
     }

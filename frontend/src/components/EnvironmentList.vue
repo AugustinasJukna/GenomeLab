@@ -23,7 +23,8 @@
         <td>{{ environment.description }}</td>
         <td>{{ environment.mutationCoefficient }}</td>
         <td>
-          <router-link :to="'/environments/edit/' + environment.id" class="btn btn-warning">Edit</router-link>
+          <router-link :to="'/environments/view/' + environment.id" class="btn btn-success" style="margin-right: 5px">View</router-link>
+          <router-link :to="'/environments/edit/' + environment.id" class="btn btn-warning" style="margin-right: 5px">Edit</router-link>
           <button  @click="showConfirmationModal(environment.id)" class="btn btn-danger">Delete</button>
         </td>
       </tr>
@@ -74,7 +75,6 @@ export default {
               console.error('Error deleting environment', error);
             })
             .finally(() => {
-              // Reset the selected environment after deletion
               this.selectedEnvironmentId = null;
             });
       }

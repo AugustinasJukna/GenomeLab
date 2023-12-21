@@ -5,84 +5,69 @@
         <div class="card">
           <div class="card-body">
             <h5 class="card-title mb-4">Register</h5>
-            <form >
+            <form>
               <div class="mb-3">
-                <label
-                    htmlFor="name"
-                    class="form-label">Name
-                </label>
+                <label htmlFor="name" class="form-label">Name</label>
                 <input
                     type="text"
                     class="form-control"
                     id="name"
                     name="name"
                     v-model="name"
+                    required
                 />
                 <div v-if="validationErrors.name" class="flex flex-col">
-                  <small  class="text-danger">
-                    {{validationErrors?.name[0]}}
-                  </small >
+                  <small class="text-danger">{{ validationErrors?.name[0] }}</small>
                 </div>
               </div>
               <div class="mb-3">
-                <label
-                    htmlFor="email"
-                    class="form-label">Email address
-                </label>
+                <label htmlFor="email" class="form-label">Email address</label>
                 <input
                     type="email"
                     class="form-control"
                     id="email"
                     name="email"
                     v-model="email"
+                    required
                 />
                 <div v-if="validationErrors.email" class="flex flex-col">
-                  <small  class="text-danger">
-                    {{validationErrors?.email[0]}}
-                  </small >
+                  <small class="text-danger">{{ validationErrors?.email[0] }}</small>
+                </div>
+                <div v-if="!isEmailValid && !isAnyFieldEmpty" class="flex flex-col">
+                  <small class="text-danger">
+                    Please enter a valid email address <i class="bi bi-exclamation-triangle-fill"></i>
+                  </small>
                 </div>
               </div>
               <div class="mb-3">
-                <label
-                    htmlFor="password"
-                    class="form-label">Password
-                </label>
+                <label htmlFor="password" class="form-label">Password</label>
                 <input
                     type="password"
                     class="form-control"
                     id="password"
                     name="password"
                     v-model="password"
+                    required
                 />
                 <div v-if="validationErrors.password" class="flex flex-col">
-                  <small  class="text-danger">
-                    {{validationErrors?.password[0]}}
-                  </small >
+                  <small class="text-danger">{{ validationErrors?.password[0] }}</small>
                 </div>
-              </div>
-              <div class="mb-3">
-                <label
-                    htmlFor="confirm_password"
-                    class="form-label">Confirm Password
-                </label>
-                <input
-                    type="password"
-                    class="form-control"
-                    id="confirm_password"
-                    name="confirm_password"
-                    v-model="confirmPassword"
-                />
               </div>
               <div class="d-grid gap-2">
                 <button
-                    :disabled="isSubmitting"
-                    @click="registerAction()"
+                    :disabled="isSubmitting || !isEmailValid"
+                    @click="registerAction"
                     type="button"
-                    class="btn btn-primary btn-block">Register Now
+                    class="btn btn-primary btn-block"
+                >
+                  Register Now
                 </button>
-                <p
-                    class="text-center">Have already an account <router-link to="/">Login here</router-link>
+                <p class="text-center">
+                  Have already an account <router-link to="/">Login here</router-link>
                 </p>
+                <div v-if="isAnyFieldEmpty" class="flex flex-col">
+                  <small class="text-danger">All fields are required</small>
+                </div>
               </div>
             </form>
           </div>
@@ -103,45 +88,67 @@ export default {
   },
   data() {
     return {
-      name:'',
-      email:'',
-      password:'',
-      confirmPassword:'',
-      validationErrors:{},
-      isSubmitting:false,
+      name: '',
+      email: '',
+      password: '',
+      validationErrors: {},
+      isSubmitting: false,
+      isAnyFieldEmpty: false,
+      isEmailValid: true,
     };
   },
   created() {
-    if(localStorage.getItem('token') != "" && localStorage.getItem('token') != null){
-      this.$router.push('/dashboard')
+    if (localStorage.getItem('token') !== "" && localStorage.getItem('token') !== null) {
+      this.$router.push('/');
     }
   },
   methods: {
-    registerAction(){
-      this.isSubmitting = true
+    registerAction() {
+      this.isSubmitting = true;
+
+      this.isEmailValid = this.validateEmail();
+
+      if (this.name === '' || this.email === '' || this.password === '' || !this.isEmailValid) {
+        this.isAnyFieldEmpty = true;
+        this.isSubmitting = false;
+        return;
+      }
+
       let payload = {
-        name:this.name,
+        name: this.name,
         email: this.email,
         password: this.password,
-        role: "RESEARCHER"
-      }
+        role: "RESEARCHER",
+      };
 
       axios.post('/auth/register', payload)
           .then(response => {
-            localStorage.setItem('token', response.data.token)
-            console.log(response.data.token)
-            localStorage.setItem('username', this.email)
-            this.$router.push('/dashboard')
-            return response
+            localStorage.setItem('token', response.data.token);
+            axios.get(`http://localhost:8080/api/v1/users/byEmail/` + this.email, {
+              headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }
+            })
+                .then((r) => {
+                  localStorage.setItem('username', r.data.id);
+                  return r;
+                })
+                .catch((e) => {
+                  return e;
+                });
+            this.$router.push('/environments');
+            return response;
           })
           .catch(error => {
-            this.isSubmitting = false
+            this.isSubmitting = false;
             if (error.response.data.errors !== undefined) {
-              this.validationErrors = error.response.data.errors
+              this.validationErrors = error.response.data.errors;
             }
-            return error
+            return error;
           });
-    }
+    },
+    validateEmail() {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(this.email);
+    },
   },
 };
 </script>

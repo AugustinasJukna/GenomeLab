@@ -1,4 +1,3 @@
-User
 <!-- ConfirmationModal.vue -->
 
 <template>
