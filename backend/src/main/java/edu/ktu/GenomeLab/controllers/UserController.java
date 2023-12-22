@@ -1,8 +1,10 @@
 package edu.ktu.GenomeLab.controllers;
 
+import edu.ktu.GenomeLab.models.Environment;
 import edu.ktu.GenomeLab.models.User;
 import edu.ktu.GenomeLab.models.enums.Role;
 import edu.ktu.GenomeLab.repositories.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +14,8 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("api/v1/users")
+@RequiredArgsConstructor
 public class UserController {
 
     @Autowired
@@ -38,20 +41,28 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
-        Optional<User> existingUser = userRepository.findById(id);
-        if (existingUser.isPresent()) {
-            User user = existingUser.get();
-            user.setName(updatedUser.getName());
-            user.setPassword(updatedUser.getPassword());
-            user.setEmail(updatedUser.getEmail());
-            user.setRole(updatedUser.getRole());
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping("/byEmail/{email}")
+    public ResponseEntity<User> getUserById(@PathVariable String email) {
+        User user = userRepository.findByEmail(email).orElse(null);
+        if (user == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(user);
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<User>  updateUser(
+            @PathVariable Long id,
+            @RequestBody User updatedUser) {
+        return userRepository.findById(id)
+                .map(user -> {
+                    user.setName(updatedUser.getName() == null ? user.getName() : updatedUser.getName());
+                    user.setPassword(updatedUser.getPassword() == null ? user.getPassword() : updatedUser.getPassword());
+                    user.setEmail(updatedUser.getEmail() == null ? user.getEmail() : updatedUser.getEmail());
+                    user.setRole(updatedUser.getRole() == null ? user.getRole() : updatedUser.getRole());
+                    return new ResponseEntity<User>(userRepository.save(user), HttpStatus.OK);
+                })
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteUser(@PathVariable Long id) {

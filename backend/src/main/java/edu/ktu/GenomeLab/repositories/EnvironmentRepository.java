@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-public interface EnvironmentRepository extends CrudRepository<Environment, Long> {
+import java.util.List;
 
+public interface EnvironmentRepository extends CrudRepository<Environment, Long> {
+    List<Environment> findByUserId(Long userId);
 }
