@@ -3,9 +3,7 @@ package edu.ktu.GenomeLab.controllers;
 import edu.ktu.GenomeLab.models.Environment;
 import edu.ktu.GenomeLab.models.Gene;
 import edu.ktu.GenomeLab.models.Organism;
-import edu.ktu.GenomeLab.models.State;
 import edu.ktu.GenomeLab.repositories.EnvironmentRepository;
-import edu.ktu.GenomeLab.repositories.StateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,13 +13,10 @@ import java.util.List;
 import java.util.Objects;
 
 @RestController
-@RequestMapping(path="api/v1/environments")
+@RequestMapping(path="/environments")
 public class EnvironmentController {
     @Autowired
     private EnvironmentRepository environmentRepository;
-
-    @Autowired
-    private StateRepository stateRepository;
 
     @PostMapping()
     public ResponseEntity<Environment> createEnvironment(
@@ -45,13 +40,6 @@ public class EnvironmentController {
         return ResponseEntity.ok(env);
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Environment>> getEnvironmentsByUserId(@PathVariable Long userId) {
-        List<Environment> environments = environmentRepository.findByUserId(userId);
-        return ResponseEntity.ok(environments);
-    }
-
-
     @PatchMapping("/{id}")
     public ResponseEntity<Environment>  updateEnvironment(
             @PathVariable Long id,
@@ -61,9 +49,6 @@ public class EnvironmentController {
                     environment.setName(updatedEnvironment.getName() == null ? environment.getName() : updatedEnvironment.getName());
                     environment.setDescription(updatedEnvironment.getDescription() == null ? environment.getDescription() : updatedEnvironment.getDescription());
                     environment.setMutationCoefficient(updatedEnvironment.getMutationCoefficient() == 0 ? environment.getMutationCoefficient() : updatedEnvironment.getMutationCoefficient());
-                    environment.setFoodCount(updatedEnvironment.getFoodCount() == 0 ? environment.getFoodCount() : updatedEnvironment.getFoodCount());
-                    environment.setOrganismsCount(updatedEnvironment.getOrganismsCount() == 0 ? environment.getOrganismsCount() : updatedEnvironment.getOrganismsCount());
-                    environment.setEliteCount(updatedEnvironment.getEliteCount() == 0 ? environment.getEliteCount() : updatedEnvironment.getEliteCount());
                     return new ResponseEntity<Environment>(environmentRepository.save(environment), HttpStatus.OK);
                 })
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -80,45 +65,42 @@ public class EnvironmentController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{id}/states")
-    public ResponseEntity<List<State>> getAllStatesById(@PathVariable Long id) {
+    @GetMapping("/{id}/organisms")
+    public ResponseEntity<List<Organism>> getAllOrganismsById(@PathVariable Long id) {
         Environment env =  environmentRepository.findById(id).orElse(null);
         if (env == null) return ResponseEntity.notFound().build();
-        List<State> states = env.getStates();
-        if (states.isEmpty()) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(states);
+        List<Organism> organisms = env.getOrganisms();
+        if (organisms.isEmpty()) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(organisms);
     }
 
-    @GetMapping("/{idEnv}/states/{idState}")
-    public ResponseEntity<State> getStatesByEnvIdAndOrgId(@PathVariable Long idEnv, @PathVariable Long idState) {
+    @GetMapping("/{idEnv}/organisms/{idOrg}")
+    public ResponseEntity<Organism> getOrganismByEnvIdAndOrgId(@PathVariable Long idEnv, @PathVariable Long idOrg) {
         Environment env =  environmentRepository.findById(idEnv).orElse(null);
         if (env == null) return ResponseEntity.notFound().build();
-        List<State> states = env.getStates();
-        State state = null;
-        for (State value : states) {
-            if (Objects.equals(value.getId(), idState)) {
-                state = value;
+        List<Organism> organisms = env.getOrganisms();
+        Organism organism = null;
+        for (Organism value : organisms) {
+            if (Objects.equals(value.getId(), idOrg)) {
+                organism = value;
             }
         }
-        if (state == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(state);
+        if (organism == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(organism);
     }
 
-    @GetMapping("/{idEnv}/states/{idState}/organisms")
-    public ResponseEntity<List<Organism>> getAllOrganismsByEnvironmentId(@PathVariable Long idEnv, @PathVariable Long idState) {
+    @GetMapping("/{idEnv}/organisms/{idOrg}/genes")
+    public ResponseEntity<List<Gene>> getAllGenesByEnvironmentId(@PathVariable Long idEnv, @PathVariable Long idOrg) {
         Environment env =  environmentRepository.findById(idEnv).orElse(null);
         if (env == null) return ResponseEntity.notFound().build();
-        List<State> states = env.getStates();
-        State state = null;
-        for (State value : states) {
-            if (Objects.equals(value.getId(), idState)) {
-                state = value;
+        List<Organism> organisms = env.getOrganisms();
+        Organism organism = null;
+        for (Organism value : organisms) {
+            if (Objects.equals(value.getId(), idOrg)) {
+                organism = value;
             }
         }
-        if (state == null || state.getOrganisms().isEmpty()) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(state.getOrganisms());
+        if (organism == null || organism.getGenes().isEmpty()) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(organism.getGenes());
     }
-
-
 }
-

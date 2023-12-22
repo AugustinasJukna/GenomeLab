@@ -1,16 +1,12 @@
 package edu.ktu.GenomeLab.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
-@NoArgsConstructor
 public class Environment {
 
     @Id
@@ -21,69 +17,21 @@ public class Environment {
     @Column(name = "description")
     private String description;
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    @JsonBackReference
-    private User user;
-
-    @OneToMany(mappedBy = "environment", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "environment")
     @JsonManagedReference
     @JsonIgnore
-    private List<State> states;
+    private List<Organism> organisms;
     @Column(name = "mutationCoefficient")
     private double mutationCoefficient;
 
-    @Column(name = "organismsCount")
-    private int organismsCount;
 
-    public int getOrganismsCount() {
-        return organismsCount;
+    public Environment() {
     }
 
-    public void setOrganismsCount(int organismsCount) {
-        this.organismsCount = organismsCount;
-    }
-
-    public int getFoodCount() {
-        return foodCount;
-    }
-
-    public void setFoodCount(int foodCount) {
-        this.foodCount = foodCount;
-    }
-
-    public int getEliteCount() {
-        return eliteCount;
-    }
-
-    public void setEliteCount(int eliteCount) {
-        this.eliteCount = eliteCount;
-    }
-
-    @Column(name = "foodCount")
-    private int foodCount;
-
-    @Column(name = "eliteCount")
-    private int eliteCount;
-
-    public Environment(String name, String description, double mutationCoefficient, int organismsCount, int foodCount, int eliteCount, User user) {
+    public Environment(String name, String description) {
         this.name = name;
         this.description = description;
-        this.mutationCoefficient = mutationCoefficient;
-        this.organismsCount = organismsCount;
-        this.foodCount = foodCount;
-        this.eliteCount = eliteCount;
-        this.user = user;
     }
-
 
     public Long getId() {
         return id;
@@ -109,12 +57,12 @@ public class Environment {
         this.description = description;
     }
 
-    public List<State> getStates() {
-        return states;
+    public List<Organism> getOrganisms() {
+        return organisms;
     }
 
-    public void setStates(List<State> states) {
-        this.states = states;
+    public void setOrganisms(List<Organism> organisms) {
+        this.organisms = organisms;
     }
 
     public double getMutationCoefficient() {

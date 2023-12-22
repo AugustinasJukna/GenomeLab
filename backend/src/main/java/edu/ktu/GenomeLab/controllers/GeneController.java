@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path="api/v1/genes")
+@RequestMapping(path="/genes")
 public class GeneController {
     @Autowired
     private GeneRepository geneRepository;
