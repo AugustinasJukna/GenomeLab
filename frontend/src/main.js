@@ -1,5 +1,4 @@
 import { createApp } from 'vue';
-import store from './store/auth.js';
 import App from './App.vue';
 import axios from 'axios';
 import 'jquery';
@@ -19,8 +18,8 @@ import UserList from "@/components/UserList.vue";
 import ProfilePage from "@/components/ProfilePage.vue";
 import UserEdit from "@/components/UserEdit.vue";
 
-//axios.defaults.baseURL = 'http://localhost:8080/api/v1';
-axios.defaults.baseURL = 'http://51.20.105.110:8080/api/v1';
+
+axios.defaults.baseURL = import.meta.env.VITE_APP_API_URL;
 
 
 
@@ -135,6 +134,5 @@ function requireAdmin(to, from, next) {
 }
 
 const app = createApp(App);
-app.use(store);
 app.use(router);
 app.mount('#app');
