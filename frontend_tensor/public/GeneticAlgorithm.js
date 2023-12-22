@@ -1,8 +1,8 @@
 class GeneticAlgorithm {
-    constructor(mutationRate) {
+    constructor(mutationRate, populationSize) {
         this.mutationRate = mutationRate;
         this.topFitnessScore = 0;
-        this.populationSize = 50;
+        this.populationSize = populationSize;
         this.bestFitnessHistory = [];
         this.avgFitness = 0;
     }
@@ -68,12 +68,15 @@ class GeneticAlgorithm {
 
         for (let organism of organisms) {
             if (organism.neuralNetwork) {
+                //select only 2 and 3 indices
                 const genes = organism.neuralNetwork.model.getWeights();
+                const selectedGenes = genes.slice(2, 4);
+
                 const organismData = {
                     x: organism.pos.x,
                     y: organism.pos.y,
                     energy: organism.energy,
-                    genes: genes.map(w => w.arraySync()),
+                    genes: selectedGenes.map(w => w.arraySync()),
                 };
                 organismsData.push(organismData);
             }
@@ -135,6 +138,9 @@ class GeneticAlgorithm {
         // for (let i = 0; i < organisms.length; i++) {
         //     organisms[i].neuralNetwork.dispose();
         // }
+        for (let i = 0; i < organisms.length; i++) {
+            organisms[i].generation++;
+        }
         return newGeneration;
     }
 

@@ -1,5 +1,6 @@
 package edu.ktu.GenomeLab.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -20,7 +21,20 @@ public class Environment {
     @Column(name = "description")
     private String description;
 
-    @OneToMany(mappedBy = "environment")
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonBackReference
+    private User user;
+
+    @OneToMany(mappedBy = "environment", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     @JsonIgnore
     private List<State> states;
@@ -60,13 +74,14 @@ public class Environment {
     @Column(name = "eliteCount")
     private int eliteCount;
 
-    public Environment(String name, String description, double mutationCoefficient, int organismsCount, int foodCount, int eliteCount) {
+    public Environment(String name, String description, double mutationCoefficient, int organismsCount, int foodCount, int eliteCount, User user) {
         this.name = name;
         this.description = description;
         this.mutationCoefficient = mutationCoefficient;
         this.organismsCount = organismsCount;
         this.foodCount = foodCount;
         this.eliteCount = eliteCount;
+        this.user = user;
     }
 
 

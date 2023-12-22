@@ -1,5 +1,7 @@
 package edu.ktu.GenomeLab.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import edu.ktu.GenomeLab.models.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -36,6 +38,19 @@ public class User implements UserDetails {
 
         @Enumerated(EnumType.STRING)
         private Role role;
+
+    public List<Environment> getEnvironments() {
+        return environments;
+    }
+
+    public void setEnvironments(List<Environment> environments) {
+        this.environments = environments;
+    }
+
+    @OneToMany(mappedBy = "user")
+    @JsonManagedReference
+    @JsonIgnore
+    private List<Environment> environments;
 
     public User(String name, String password, String email, Role role) {
         this.name = name;

@@ -45,6 +45,13 @@ public class EnvironmentController {
         return ResponseEntity.ok(env);
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Environment>> getEnvironmentsByUserId(@PathVariable Long userId) {
+        List<Environment> environments = environmentRepository.findByUserId(userId);
+        return ResponseEntity.ok(environments);
+    }
+
+
     @PatchMapping("/{id}")
     public ResponseEntity<Environment>  updateEnvironment(
             @PathVariable Long id,

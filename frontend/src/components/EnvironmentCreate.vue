@@ -61,6 +61,13 @@ export default {
         organismsCount: 0,
         foodCount: 0,
         eliteCount: 0,
+        user: {
+          id: JSON.parse(localStorage.getItem('user')).id,
+          name: JSON.parse(localStorage.getItem('user')).name,
+          password: JSON.parse(localStorage.getItem('user')).password,
+          email: JSON.parse(localStorage.getItem('user')).email,
+          role: JSON.parse(localStorage.getItem('user')).role
+        },
       },
     };
   },

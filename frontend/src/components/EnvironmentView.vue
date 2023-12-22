@@ -2,9 +2,9 @@
   <div class="container mt-4">
     <h2 class="text-center mb-4">Environment Details</h2>
     <ConfirmationModal :message="confirmationMessage" :onConfirm="deleteState" />
-    <div class="card mx-auto overflow-hidden" style="max-width: 800px;">
+    <div class="card mx-auto overflow-hidden">
       <div class="row no-gutters">
-        <div class="col-md-6 p-3 overflow:hidden" style="margin-top: -2%">
+        <div class="col-md-6 p-3 overflow:hidden">
           <table class="table table-hover">
             <tbody>
             <tr>
@@ -38,24 +38,21 @@
             </tbody>
           </table>
         </div>
-
         <div class="col-md-6">
-          <img src="../assets/images/env.jpg" alt="Environment Image" class="img-fluid rounded" style="box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2); max-width: 300px; margin-left: 30%">
+          <img src="../assets/images/env.jpg" alt="Environment Image" class="img-fluid rounded mx-auto d-block" style="box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2); max-width: 300px; max-height: 400px;">
         </div>
       </div>
     </div>
-
     <div class="text-center mt-3">
       <button class="btn btn-success" @click="createNewState">Create New State</button>
     </div>
-
     <div class="mt-4 text-center">
-      <div class="table-responsive mx-auto mt-0" style="max-width: 800px;">
-        <table class="table">
+      <div class="table-responsive mx-auto mt-0">
+        <table class="table" v-if="states.length > 0">
           <thead>
           <tr>
             <th>ID</th>
-            <th>Name</th>
+            <th>Date</th>
             <th>Actions</th>
           </tr>
           </thead>
@@ -64,15 +61,15 @@
             <td>{{ state.id }}</td>
             <td>{{ state.date }}</td>
             <td>
+              <button class="btn btn-primary" style="margin-right: 10px" @click="viewOrganisms(state.id)">View Organisms</button>
               <button class="btn btn-danger" @click="showConfirmationModal(state.id)">Delete</button>
             </td>
           </tr>
           </tbody>
         </table>
+        <p v-else class="mt-3">No states available for this environment.</p>
       </div>
     </div>
-
-    <!-- Confirmation Modal -->
     <transition name="fade">
       <ConfirmationModal v-if="isConfirmationVisible" :message="confirmationMessage" :onConfirm="deleteState" />
     </transition>
@@ -92,6 +89,9 @@ export default {
         name: '',
         description: '',
         mutationCoefficient: 0,
+        organismsCount: 0,
+        foodCount: 0,
+        eliteCount: 0,
       },
       states: [],
       confirmationMessage: '',
@@ -111,10 +111,12 @@ export default {
         this.states = response2.data;
       } catch (error) {
         console.error('Error fetching environment', error);
+        if (error.response.status === 404) {
+          this.states = [];
+        }
       }
     },
     launchState(stateId) {
-      // Implement launch state logic
       console.log(`Launching state with ID ${stateId}`);
     },
     showConfirmationModal(stateId) {
@@ -136,11 +138,13 @@ export default {
               console.error('Error deleting state', error);
             })
             .finally(() => {
-              // Reset the selected state after deletion
               this.selectedStateId = null;
               this.isConfirmationVisible = false;
             });
       }
+    },
+    viewOrganisms(stateId) {
+      this.$router.push(`/states/${stateId}/organisms`);
     },
     createNewState() {
       this.$router.push(`/states/create/${this.$route.params.id}`);
@@ -151,26 +155,24 @@ export default {
 
 <style scoped>
 .card {
-  width: 800px;
+  width: 100%;
   margin: auto;
+  display: flex;
+  flex-direction: column;
 }
 
-.col-form-label {
-  font-size: 16px;
+.img-fluid {
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  display: block;
+  margin: 0 auto;
 }
 
-.col-sm-9 {
-  font-size: 18px;
-}
-
-strong {
-  font-size: 18px;
-}
-
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.5s;
-}
-.fade-enter, .fade-leave-to {
-  opacity: 0;
+.table-responsive {
+  overflow-x: auto;
+  margin-top: 10px;
 }
 </style>
+
+

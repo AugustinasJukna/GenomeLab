@@ -71,7 +71,7 @@ public class OrganismController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/deleteByState/{stateId}")
+    @GetMapping("/getByState/{stateId}")
     public ResponseEntity<List<Organism>> getOrganismsByStateId(@PathVariable Long stateId) {
         List<Organism> organisms = organismRepository.findByStateId(stateId);
         return ResponseEntity.ok(organisms);

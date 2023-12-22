@@ -6,7 +6,7 @@
     <router-link to="/environments/new" class="btn btn-primary mb-4">Add Environment</router-link>
     <ConfirmationModal :message="confirmationMessage" :onConfirm="deleteEnvironment" />
 
-    <table class="table">
+    <table v-if="environments.length > 0" class="table">
       <thead>
       <tr>
         <th>ID</th>
@@ -30,6 +30,9 @@
       </tr>
       </tbody>
     </table>
+    <div v-if="environments.length === 0">
+      <h5 style="text-align: center">No environments available.</h5>
+    </div>
   </div>
 </template>
 
@@ -51,7 +54,7 @@ export default {
   methods: {
     async fetchEnvironments() {
       try {
-        const response = await axios.get('/environments', { headers:{Authorization: 'Bearer ' + localStorage.getItem('token')}});
+        const response = await axios.get(`/environments/user/${JSON.parse(localStorage.getItem('user')).id}`, { headers:{Authorization: 'Bearer ' + localStorage.getItem('token')}});
         this.environments = response.data;
       } catch (error) {
         console.error('Error fetching environments', error);
@@ -72,6 +75,9 @@ export default {
               this.fetchEnvironments();
             })
             .catch((error) => {
+              if (error.response.code === 404) {
+                this.environments = [];
+              }
               console.error('Error deleting environment', error);
             })
             .finally(() => {

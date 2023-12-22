@@ -1,5 +1,6 @@
 package edu.ktu.GenomeLab.controllers;
 
+import edu.ktu.GenomeLab.models.Environment;
 import edu.ktu.GenomeLab.models.User;
 import edu.ktu.GenomeLab.models.enums.Role;
 import edu.ktu.GenomeLab.repositories.UserRepository;
@@ -48,19 +49,20 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
-        Optional<User> existingUser = userRepository.findById(id);
-        if (existingUser.isPresent()) {
-            User user = existingUser.get();
-            user.setName(updatedUser.getName());
-            user.setPassword(updatedUser.getPassword());
-            user.setEmail(updatedUser.getEmail());
-            user.setRole(updatedUser.getRole());
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<User>  updateUser(
+            @PathVariable Long id,
+            @RequestBody User updatedUser) {
+        return userRepository.findById(id)
+                .map(user -> {
+                    user.setName(updatedUser.getName() == null ? user.getName() : updatedUser.getName());
+                    user.setPassword(updatedUser.getPassword() == null ? user.getPassword() : updatedUser.getPassword());
+                    user.setEmail(updatedUser.getEmail() == null ? user.getEmail() : updatedUser.getEmail());
+                    user.setRole(updatedUser.getRole() == null ? user.getRole() : updatedUser.getRole());
+                    return new ResponseEntity<User>(userRepository.save(user), HttpStatus.OK);
+                })
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteUser(@PathVariable Long id) {

@@ -26,6 +26,8 @@ app.post('/writeJson', (req, res) => {
     res.json({ success: true });
 });
 
+
+
 app.get('/readJson', (req, res) => {
     try {
         const rawData = fs.readFileSync('data.json');
@@ -36,6 +38,14 @@ app.get('/readJson', (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+app.post('/writeConstants', (req, res) => {
+    const constantsData = req.body;
+    fs.writeFileSync('./public/constants.json', JSON.stringify(constantsData));
+
+    res.json({ success: true });
+});
+
 
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);

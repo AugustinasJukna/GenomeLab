@@ -109,6 +109,7 @@ export default {
             })
                 .then((r) => {
                   localStorage.setItem('username', r.data.id);
+                  localStorage.setItem('user', JSON.stringify(r.data));
                   return r;
                 })
                 .catch((e) => {

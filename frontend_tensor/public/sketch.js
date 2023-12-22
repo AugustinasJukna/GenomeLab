@@ -4,10 +4,10 @@ let organisms = [];
 let ORGANISMS_COUNT = 50;
 let GENERATIONS_COUNT = 1;
 let ELITE_COUNT = 10;
+let MUTATION_RATE = 0.3;
 let lastGeneration = 0;
 let stepCounter = 0;
 let fastForward = false;
-const geneticAlgorithm = new GeneticAlgorithm(0.3);
 const STEPS_PER_GENERATION = 500;
 food = [];
 
@@ -23,21 +23,22 @@ async function fetchConstants() {
     }
 }
 
-
+let geneticAlgorithm;
 
 async function setup() {
     createCanvas(800, 800);
     tf.setBackend('cpu');
     frameRate(30);
-    for (let i = 0; i < ORGANISMS_COUNT; i++) {
-        organisms.push(new Organism());
-    }
-
     let constants = await fetchConstants();
     ORGANISMS_COUNT = constants.ORGANISMS_COUNT;
     FOOD_COUNT = constants.FOOD_COUNT;
     ELITE_COUNT = constants.ELITE_COUNT;
     GENERATIONS_COUNT = constants.GENERATIONS_COUNT;
+    MUTATION_RATE = constants.MUTATION_RATE;
+    for (let i = 0; i < constants.ORGANISMS_COUNT; i++) {
+        organisms.push(new Organism());
+    }
+    geneticAlgorithm = new GeneticAlgorithm(MUTATION_RATE, ORGANISMS_COUNT);
 }
 
 function addFoodSquare() {
@@ -102,17 +103,9 @@ function toggleFastForward() {
 
 function draw() {
     let slider = document.getElementById("myRange").value;
-    background(255); // Set background color to white
-    stroke(150); // Set grid color
-    strokeWeight(1); // Set grid line thickness
-
-    // Draw grid
-    for (let i = 20; i < width; i += 20) {
-        line(i, 0, i, height);
-    }
-    for (let j = 20; j < height; j += 20) {
-        line(0, j, width, j);
-    }
+    background(255);
+    stroke(150);
+    strokeWeight(1);
 
     if (fastForward) {
         fastForwardGenerations(10);
@@ -120,9 +113,9 @@ function draw() {
         GENERATIONS_COUNT += 10;
     } else {
         for (let j = 0; j < slider; j++) {
-            background(255); // Set background color to white
-            stroke(150); // Set grid color
-            strokeWeight(1); // Set grid line thickness
+            background(255);
+            stroke(150);
+            strokeWeight(1);
 
             stroke(0, 255, 0);
             strokeWeight(2);
@@ -143,13 +136,13 @@ function draw() {
                 organisms[i].age();
             }
 
-            fill(0); // Set text color to black
+            fill(0);
             textSize(16);
             text(`Generation: ${GENERATIONS_COUNT}`, 10, height - 20);
             text(`Average Fitness: ${geneticAlgorithm.avgFitness}`, 10, height - 40);
             stepCounter++;
 
-            if (stepCounter >= STEPS_PER_GENERATION || organisms.length === 10) {
+            if (stepCounter >= STEPS_PER_GENERATION) {
                 organisms = geneticAlgorithm.newGeneration(organisms).slice();
                 stepCounter = 0;
                 GENERATIONS_COUNT++;

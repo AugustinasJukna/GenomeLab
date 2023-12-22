@@ -27,7 +27,7 @@ public class State {
     @Column(name = "date")
     private Date date;
 
-    @OneToMany(mappedBy = "state")
+    @OneToMany(mappedBy = "state", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     @JsonIgnore
     private List<Organism> organisms;
