@@ -14,31 +14,38 @@ public class Organism {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "organism")
-    @JsonManagedReference
-    @JsonIgnore
-    private List<Gene> genes;
+    @Column(name = "genes")
+    private String genes;
 
     @Column(name = "x")
     private int x;
     @Column(name = "y")
     private int y;
-    @Column(name = "age")
-    private int age;
+
+    public int getEnergy() {
+        return energy;
+    }
+
+    public void setEnergy(int energy) {
+        this.energy = energy;
+    }
+
+    @Column(name = "energy")
+    private int energy;
 
     @ManyToOne
-    @JoinColumn(name = "environment_id")
+    @JoinColumn(name = "state_id")
     @JsonBackReference
-    @JsonIgnore
-    private Environment environment;
+    private State state;
 
     public Organism() {
 
     }
-    public Organism(int x, int y, int age) {
+    public Organism(int x, int y, int energy, State state) {
         this.x = x;
         this.y = y;
-        this.age = age;
+        this.state = state;
+        this.energy = energy;
     }
 
     public Long getId() {
@@ -49,11 +56,11 @@ public class Organism {
         this.id = id;
     }
 
-    public List<Gene> getGenes() {
+    public String getGenes() {
         return genes;
     }
 
-    public void setGenes(List<Gene> genes) {
+    public void setGenes(String genes) {
         this.genes = genes;
     }
 
@@ -72,20 +79,13 @@ public class Organism {
         this.y = y;
     }
 
-    public int getAge() {
-        return age;
+
+    public State getState() {
+        return this.state;
     }
 
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public Environment getEnvironment() {
-        return this.environment;
-    }
-
-    public void setEnvironment(Environment environment) {
-        this.environment = environment;
+    public void setState(State state) {
+        this.state = state;
     }
 
 
