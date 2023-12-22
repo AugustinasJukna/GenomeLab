@@ -1,5 +1,7 @@
 package edu.ktu.GenomeLab.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import edu.ktu.GenomeLab.models.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,31 +23,51 @@ import java.util.List;
 @Table(name = "users")
 public class User implements UserDetails {
 
-//        @Id
-//        @GeneratedValue(strategy = GenerationType.IDENTITY)
-//        private Long id;
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long id;
 
         @Column(name = "name")
         private String name;
 
         @Column(name = "password")
         private String password;
-    @Id
-        @Column(name = "email")
+
+        @Column(name = "email", unique = true)
         private String email;
 
         @Enumerated(EnumType.STRING)
         private Role role;
 
+    public List<Environment> getEnvironments() {
+        return environments;
+    }
+
+    public void setEnvironments(List<Environment> environments) {
+        this.environments = environments;
+    }
+
+    @OneToMany(mappedBy = "user")
+    @JsonManagedReference
+    @JsonIgnore
+    private List<Environment> environments;
+
+    public User(String name, String password, String email, Role role) {
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+    }
 
 
-//    public Long getId() {
-//        return id;
-//    }
-//
-//    public void setId(Long id) {
-//        this.id = id;
-//    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
