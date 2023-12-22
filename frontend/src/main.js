@@ -19,7 +19,8 @@ import UserList from "@/components/UserList.vue";
 import ProfilePage from "@/components/ProfilePage.vue";
 import UserEdit from "@/components/UserEdit.vue";
 
-axios.defaults.baseURL = 'http://localhost:8080/api/v1';
+//axios.defaults.baseURL = 'http://localhost:8080/api/v1';
+axios.defaults.baseURL = 'http://51.20.105.110:8080/api/v1';
 
 
 

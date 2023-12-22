@@ -124,7 +124,7 @@ export default {
       axios.post('/auth/register', payload)
           .then(response => {
             localStorage.setItem('token', response.data.token);
-            axios.get(`http://localhost:8080/api/v1/users/byEmail/` + this.email, {
+            axios.get(`/users/byEmail/` + this.email, {
               headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }
             })
                 .then((r) => {
