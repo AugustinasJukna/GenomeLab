@@ -1,10 +1,11 @@
 class GeneticAlgorithm {
-    constructor(mutationRate, populationSize) {
+    constructor(mutationRate, populationSize, elitism) {
         this.mutationRate = mutationRate;
         this.topFitnessScore = 0;
         this.populationSize = populationSize;
         this.bestFitnessHistory = [];
         this.avgFitness = 0;
+        this.elitism = elitism;
     }
 
     rouletteWheelSelection(population, tfit) {
@@ -23,11 +24,14 @@ class GeneticAlgorithm {
         return shuffled.slice(0, count);
     }
 
-    truncationSelection(organisms, elitismNum) {
-        const orgsSorted = organisms.slice().sort((a, b) => b.fitness - a.fitness);
+    truncationSelection(orgsSorted, elitismNum) {
+        //const orgsSorted = organisms.slice().sort((a, b) => b.fitness - a.fitness);
+
+        if (elitismNum === 0) {
+            return orgsSorted.slice(0, 2);
+        }
 
         const candidates = Array.from({ length: elitismNum }, (_, index) => index);
-
         const randomIndices = this.sample(candidates, 2);
         const org1 = orgsSorted[randomIndices[0]];
         const org2 = orgsSorted[randomIndices[1]];
@@ -68,9 +72,8 @@ class GeneticAlgorithm {
 
         for (let organism of organisms) {
             if (organism.neuralNetwork) {
-                //select only 2 and 3 indices
                 const genes = organism.neuralNetwork.model.getWeights();
-                const selectedGenes = genes.slice(2, 4);
+                const selectedGenes = genes;//genes.slice(2, 4);
 
                 const organismData = {
                     x: organism.pos.x,
@@ -100,6 +103,33 @@ class GeneticAlgorithm {
         }
     }
 
+    async loadOrganismsWeightsFromFile(organisms) {
+        try {
+            const response = await fetch('http://localhost:3500/readJson', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const data = await response.json();
+            const result = JSON.parse(data.jsonData);
+            console.log('Organisms data loaded successfully:', result);
+            console.log(organisms.length)
+            for (let i = 0; i < organisms.length; i++) {
+                console.log("Loading organism " + result[i]);
+                // const genes = result[i].genes.map(w => tf.tensor(w));
+                // organisms[i].neuralNetwork.model.setWeights(genes);
+                organisms[i].pos.x = result[i].x;
+                organisms[i].pos.y = result[i].y;
+                organisms[i].energy = result[i].energy;
+            }
+            return organisms;
+        } catch (error) {
+            console.error('Error loading organisms data:', error);
+        }
+    }
+
 
 
 
@@ -108,25 +138,27 @@ class GeneticAlgorithm {
         let totalFitness = this.calculatePopulationFitness(organisms);
         let newGeneration = [];
 
-        let eliteCount = Math.round(this.populationSize * 0.1);
         let sortedOrganisms = organisms.slice().sort((a, b) => b.fitness - a.fitness);
-        let elites = sortedOrganisms.slice(0, eliteCount);
+        let elites = sortedOrganisms.slice(0, this.elitism);
         newGeneration.push(...elites);
 
 
-        while (newGeneration.length < this.populationSize - eliteCount) {
+        while (newGeneration.length < this.populationSize) {
             // let parentA = this.rouletteWheelSelection(organisms, totalFitness);
             // let parentB = this.rouletteWheelSelection(organisms, totalFitness);
-            const [parentA, parentB] = this.truncationSelection(organisms, eliteCount);
+            const [parentA, parentB] = this.truncationSelection(sortedOrganisms, this.elitism);
             let child = parentA.crossover(parentB);
             child.mutate(this.mutationRate);
             child.energy = 0;
             child.fitness = 0;
             newGeneration.push(child);
         }
-        while (newGeneration.length < this.populationSize) {
-            newGeneration.push(new Organism())
-        }
+        console.log("New generation: ");
+        console.log(newGeneration)
+        console.log("New generation length: " + newGeneration.length)
+        // while (newGeneration.length < this.populationSize) {
+        //     newGeneration.push(new Organism())
+        // }
         // for (let i = 0; i < organisms.length; i++) {
         //     console.log(organisms[i])
         //     tf.tidy(() => {

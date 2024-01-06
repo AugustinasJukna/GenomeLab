@@ -144,7 +144,7 @@ export default {
       }
     },
     viewOrganisms(stateId) {
-      this.$router.push(`/states/${stateId}/organisms`);
+      this.$router.push(`/environments/view/1/states/${stateId}/organisms`);
     },
     createNewState() {
       this.$router.push(`/states/create/${this.$route.params.id}`);

@@ -17,6 +17,8 @@ import OrganismsList from "@/components/OrganismsList.vue";
 import UserList from "@/components/UserList.vue";
 import ProfilePage from "@/components/ProfilePage.vue";
 import UserEdit from "@/components/UserEdit.vue";
+import OrganismEdit from "@/components/OrganismEdit.vue";
+import OrganismCreate from "@/components/OrganismCreate.vue";
 
 
 axios.defaults.baseURL = import.meta.env.VITE_APP_API_URL;
@@ -76,7 +78,25 @@ const router = createRouter({
                     next('/login');
                 }
             },},
-        { path: '/states/:id/organisms', component: OrganismsList ,
+        { path: '/environments/view/:envId/states/:stateId/organisms/edit/:organismId', component: OrganismEdit ,
+            beforeEnter: (to, from, next) => {
+                const isAuthenticated = localStorage.getItem('token') !== null;
+                if (isAuthenticated) {
+                    next();
+                } else {
+                    next('/login');
+                }
+            },},
+        { path: '/environments/view/:envId/states/:stateId/organisms', component: OrganismsList ,
+            beforeEnter: (to, from, next) => {
+                const isAuthenticated = localStorage.getItem('token') !== null;
+                if (isAuthenticated) {
+                    next();
+                } else {
+                    next('/login');
+                }
+            },},
+        { path: '/environments/view/:envId/states/:stateId/organisms/create', component: OrganismCreate ,
             beforeEnter: (to, from, next) => {
                 const isAuthenticated = localStorage.getItem('token') !== null;
                 if (isAuthenticated) {

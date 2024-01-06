@@ -35,10 +35,14 @@ async function setup() {
     ELITE_COUNT = constants.ELITE_COUNT;
     GENERATIONS_COUNT = constants.GENERATIONS_COUNT;
     MUTATION_RATE = constants.MUTATION_RATE;
+    LOAD_FROM_FILE = constants.LOAD_FROM_FILE;
     for (let i = 0; i < constants.ORGANISMS_COUNT; i++) {
         organisms.push(new Organism());
     }
-    geneticAlgorithm = new GeneticAlgorithm(MUTATION_RATE, ORGANISMS_COUNT);
+    geneticAlgorithm = new GeneticAlgorithm(MUTATION_RATE, ORGANISMS_COUNT, ELITE_COUNT);
+    if (LOAD_FROM_FILE === 1) {
+        await geneticAlgorithm.loadOrganismsWeightsFromFile(organisms);
+    }
 }
 
 function addFoodSquare() {

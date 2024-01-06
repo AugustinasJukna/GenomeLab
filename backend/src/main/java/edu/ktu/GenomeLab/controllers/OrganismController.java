@@ -55,9 +55,12 @@ public class OrganismController {
         Organism organism = organismRepository.findById(id)
                 .orElse(null);;
         if (organism == null) return ResponseEntity.notFound().build();
+        organism.setEnergy(updatedOrganism.getEnergy());
+        organism.setGenes(updatedOrganism.getGenes());
         organism.setX(updatedOrganism.getX());
         organism.setY(updatedOrganism.getY());
-        return ResponseEntity.ok(organism);
+        Organism updatedEntity = organismRepository.save(organism);
+        return ResponseEntity.ok(updatedEntity);
     }
 
     @DeleteMapping("/{id}")

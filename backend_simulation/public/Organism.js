@@ -3,8 +3,8 @@ class Organism {
         this.pos = createVector(random(width), random(height));
         this.size = 8;
         this.color = color(0, 130, 255);
-        this.neuralNetwork = new NeuralNetwork(1, 5, 2);
-        this.energy = 100;
+        this.neuralNetwork = new NeuralNetwork(2, 6, 2);
+        this.energy = 0;
         this.brainSize = 2;
         this.lifetime = 0;
         this.id = random(1000000);
@@ -80,7 +80,7 @@ class Organism {
         let normalizedTheta = (theta + PI) / (2 * PI);
         let normalizedX = this.pos.x / width;
         let normalizedY = this.pos.y / height;
-        let input = [normalizedRotation];
+        let input = [normalizedRotation, normalizedDist];
         let [rotation, acceleration] = this.neuralNetwork.predict(input);
         let dt = 0.04;
         this.heading += rotation * dt;

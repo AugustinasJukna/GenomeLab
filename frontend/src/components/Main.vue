@@ -24,7 +24,7 @@ export default {
         ORGANISMS_COUNT: 50,
         GENERATION_COUNT: 1,
         FOOD_COUNT: 200,
-        ELITE_COUNT: 1,
+        ELITE_COUNT: 5,
         MUTATION_COEFFICIENT: 0.3,
         GENERATIONS_COUNT: 1,
       },
